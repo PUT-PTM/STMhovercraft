@@ -59,8 +59,8 @@ int main(void) {
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
 
 	//KONFIGURACJA 1 KANA£U
-	TIM_OC1Init(TIM4, &TIM_OCInitStructure);
-	TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);
+	TIM_OC3Init(TIM4, &TIM_OCInitStructure);
+	TIM_OC3PreloadConfig(TIM4, TIM_OCPreload_Enable);
 	GPIO_PinAFConfig(GPIOB, GPIO_PinSource8, GPIO_AF_TIM4);
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
@@ -73,19 +73,19 @@ int main(void) {
 			i += 11;
 		else
 			i -= 11;
-		if (i >= 3000) {
+		if (i >= 1750) {
 			if (b == 1)
 				b = 0;
 			else
 				b = 1;
 		}
-		if (i <= 500) {
+		if (i <= 750) {
 			if (b)
 				b = 0;
 			else
 				b = 1;
 		}
-		TIM4->CCR1 = i;
+		TIM4->CCR3 = i;
 		Delay(10);
 	}
 

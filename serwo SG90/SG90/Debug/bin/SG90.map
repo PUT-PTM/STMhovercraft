@@ -188,10 +188,10 @@ Discarded input sections
                 0x00000000       0x38 ..\obj\stm32f4xx_tim.o
  .text.TIM_SetClockDivision
                 0x00000000       0x38 ..\obj\stm32f4xx_tim.o
+ .text.TIM_OC1Init
+                0x00000000       0xf4 ..\obj\stm32f4xx_tim.o
  .text.TIM_OC2Init
                 0x00000000      0x110 ..\obj\stm32f4xx_tim.o
- .text.TIM_OC3Init
-                0x00000000      0x10c ..\obj\stm32f4xx_tim.o
  .text.TIM_OC4Init
                 0x00000000       0xcc ..\obj\stm32f4xx_tim.o
  .text.TIM_OCStructInit
@@ -214,10 +214,10 @@ Discarded input sections
                 0x00000000       0x38 ..\obj\stm32f4xx_tim.o
  .text.TIM_ForcedOC4Config
                 0x00000000       0x3c ..\obj\stm32f4xx_tim.o
+ .text.TIM_OC1PreloadConfig
+                0x00000000       0x38 ..\obj\stm32f4xx_tim.o
  .text.TIM_OC2PreloadConfig
                 0x00000000       0x3c ..\obj\stm32f4xx_tim.o
- .text.TIM_OC3PreloadConfig
-                0x00000000       0x38 ..\obj\stm32f4xx_tim.o
  .text.TIM_OC4PreloadConfig
                 0x00000000       0x3c ..\obj\stm32f4xx_tim.o
  .text.TIM_OC1FastConfig
@@ -351,7 +351,7 @@ Linker script and memory map
 
                 0x20020000                _eram = 0x20020000
 
-.text           0x08000000      0xa00
+.text           0x08000000      0xa18
  *(.isr_vector)
  .isr_vector    0x08000000      0x188 ..\obj\startup_stm32f4xx.o
                 0x08000000                g_pfnVectors
@@ -491,12 +491,12 @@ Linker script and memory map
                 0x080007c0                TIM_TimeBaseInit
  .text.TIM_Cmd  0x08000894       0x40 ..\obj\stm32f4xx_tim.o
                 0x08000894                TIM_Cmd
- .text.TIM_OC1Init
-                0x080008d4       0xf4 ..\obj\stm32f4xx_tim.o
-                0x080008d4                TIM_OC1Init
- .text.TIM_OC1PreloadConfig
-                0x080009c8       0x38 ..\obj\stm32f4xx_tim.o
-                0x080009c8                TIM_OC1PreloadConfig
+ .text.TIM_OC3Init
+                0x080008d4      0x10c ..\obj\stm32f4xx_tim.o
+                0x080008d4                TIM_OC3Init
+ .text.TIM_OC3PreloadConfig
+                0x080009e0       0x38 ..\obj\stm32f4xx_tim.o
+                0x080009e0                TIM_OC3PreloadConfig
  *(.init)
  *(.fini)
  *crtbegin.o(.ctors)
@@ -512,35 +512,35 @@ Linker script and memory map
  *(.rodata*)
  *(.eh_fram e*)
 
-.glue_7         0x08000a00        0x0
+.glue_7         0x08000a18        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x08000a00        0x0
+.glue_7t        0x08000a18        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x08000a00        0x0
+.vfp11_veneer   0x08000a18        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x08000a00        0x0
+.v4_bx          0x08000a18        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x08000a00        0x0
+.iplt           0x08000a18        0x0
  .iplt          0x00000000        0x0 ..\obj\stm32f4xx_pwr.o
 
-.rel.dyn        0x08000a00        0x0
+.rel.dyn        0x08000a18        0x0
  .rel.iplt      0x00000000        0x0 ..\obj\stm32f4xx_pwr.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x08000a00                __exidx_start = .
+                0x08000a18                __exidx_start = .
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x08000a00                __exidx_end = .
-                0x08000a00                __etext = .
-                0x08000a00                _sidata = __etext
+                0x08000a18                __exidx_end = .
+                0x08000a18                __etext = .
+                0x08000a18                _sidata = __etext
 
-.data           0x20000000       0x1c load address 0x08000a00
+.data           0x20000000       0x1c load address 0x08000a18
                 0x20000000                __data_start__ = .
                 0x20000000                _sdata = __data_start__
  *(vtable)
@@ -570,10 +570,10 @@ Linker script and memory map
                 0x2000001c                __data_end__ = .
                 0x2000001c                _edata = __data_end__
 
-.igot.plt       0x2000001c        0x0 load address 0x08000a1c
+.igot.plt       0x2000001c        0x0 load address 0x08000a34
  .igot.plt      0x00000000        0x0 ..\obj\stm32f4xx_pwr.o
 
-.bss            0x2000001c        0x4 load address 0x08000a1c
+.bss            0x2000001c        0x4 load address 0x08000a34
                 0x2000001c                . = ALIGN (0x4)
                 0x2000001c                __bss_start__ = .
                 0x2000001c                _sbss = __bss_start__
@@ -591,7 +591,7 @@ Linker script and memory map
  *(.heap*)
                 0x20000020                __HeapLimit = .
 
-.co_stack       0x20000020      0x800 load address 0x08000a20
+.co_stack       0x20000020      0x800 load address 0x08000a38
                 0x20000020                . = ALIGN (0x8)
  *(.co_stack .co_stack.*)
  .co_stack      0x20000020      0x800 ..\obj\startup_stm32f4xx.o
