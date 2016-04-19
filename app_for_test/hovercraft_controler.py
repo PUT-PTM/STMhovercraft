@@ -51,7 +51,7 @@ class NiebieskiZab():
 			time.sleep(1)
 
 	def __del__(self):
-		print("zakończono blutacza")
+		pass
 		#self.socket.close()
 
 class Gui():
@@ -183,7 +183,6 @@ class Gui():
 # INICJALIZACJA
 if __name__ == '__main__':
 	top = Gui()
-	print "siemka"
 
 
 
