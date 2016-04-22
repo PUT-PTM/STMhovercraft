@@ -33,16 +33,16 @@
 #include "stm32_ub_hcsr04.h"
 
 static __IO uint32_t TimingDelay; // zmienna pomocna do zegara SysTick
-char odebrane[16]; // ³añcuch znaków przeznaczony do zbierania odbieranych danych
-/* Inicjalizacja zmiennych steruj¹cych */
+char odebrane[16]; // lancuch znakow przeznaczony do zbierania odbieranych danych
+/* Inicjalizacja zmiennych sterujacych */
 volatile uint16_t dane_serwo = 1200; // wartosc srodkowa serwa
-volatile uint16_t dane_silnik1 = 0; // silnik napedzajacy, wy³aczony, maks 65500, min 0
-volatile uint16_t dane_silnik2 = 0; // silnik unosz¹cy, wy³aczony, w³aczony 65500
-volatile uint8_t kierunek_silnik1 = 1; // silnik napedzajacy, kierunek w przód
+volatile uint16_t dane_silnik1 = 0; // silnik napedzajacy, wylaczony, maks 65500, min 0
+volatile uint16_t dane_silnik2 = 0; // silnik unoszacy, wylaczony, wlaczony 65500
+volatile uint8_t kierunek_silnik1 = 1; // silnik napedzajacy, kierunek w przod
 volatile uint8_t kierunek_silnik2 = 1; // silnik unoszacy, kierunek unoszacy
-volatile float odl = 0; // zmienna przechowuj¹ca odleg³osc w cm, od przeszkody z czujnika HC04
-char* do_wyslania = "000"; // ³añcuch znaków przeznaczony do wys³ania do kontrolera
-volatile uint8_t licznik = 0; // s³u¿y do sprawdzania jak d³ugo nie odebrano nowych danych
+volatile float odl = 0; // zmienna przechowujaca odleglosc w cm, od przeszkody z czujnika HC04
+char* do_wyslania = "000"; // lancuch znakow przeznaczony do wyslania do kontrolera
+volatile uint8_t licznik = 0; // sluzy do sprawdzania jak dlugo nie odebrano nowych danych
 
 /*******************************************************************************************************
  Funkcje inicjalizujace zegar SysTtick
@@ -62,7 +62,7 @@ void SysTick_Handler(void) {
 }
 
 /*******************************************************************************************************
- Funckja inicjalizuj¹ca linie steruj¹ce
+ Funckja inicjalizujaca linie sterujace
  *******************************************************************************************************/
 void Zegar() {
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
@@ -72,10 +72,10 @@ void Zegar() {
 }
 
 /*******************************************************************************************************
- Funkcja inicjalizuj¹ca portów GPIO
+ Funkcja inicjalizujaca portow GPIO
  ********************************************************************************************************/
 void GPIO() {
-	/* piny steru¹ce kierunkami silników */
+	/* piny sterujace kierunkami silnikow */
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_10 | GPIO_Pin_9
 			| GPIO_Pin_7;
@@ -85,7 +85,7 @@ void GPIO() {
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_Init(GPIOE, &GPIO_InitStructure);
 
-	/* piny PWM dla serwa i obu silników */
+	/* piny PWM dla serwa i obu silnikow */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
@@ -95,7 +95,7 @@ void GPIO() {
 }
 
 /****************************************************************************************************
- Funkcja configuruj¹ca USART
+ Funkcja konfigurujaca USART
  ****************************************************************************************************/
 void Config_USART() {
 	USART_InitTypeDef USART_InitStructure;
@@ -110,7 +110,7 @@ void Config_USART() {
 }
 
 /******************************************************************************************************
- Funkcje konfiguruj¹ce piny TX i RX wykorzystywane przy transmisji danych
+ Funkcje konfigurujace piny TX i RX wykorzystywane przy transmisji danych
  *******************************************************************************************************/
 
 void Config_Tx() {
@@ -135,7 +135,7 @@ void Config_Rx() {
 }
 
 /*********************************************************************************************************
- Funkcja konfiguruj¹ca przerwania dla USART
+ Funkcja konfigurujaca przerwania dla USART
  **********************************************************************************************************/
 void Config_NVIC() {
 	NVIC_InitTypeDef NVIC_InitStructure;
@@ -148,7 +148,7 @@ void Config_NVIC() {
 }
 
 /**********************************************************************************************************
- Funkcja pomocnicza wykorzystywana do konwertowania ³añcuchów znakowych na integer
+ Funkcja pomocnicza wykorzystywana do konwertowania lancuchow znakowych na integer
  **********************************************************************************************************/
 int CharToInt(const char c) {
 	switch (c) {
@@ -178,7 +178,7 @@ int CharToInt(const char c) {
 }
 
 /*****************************************************************************************************
- Funkcja pomocnicza wykorzystywana do konwertowania liczb na ³añcuchy znakowe
+ Funkcja pomocnicza wykorzystywana do konwertowania liczb na lancuchy znakowe
  ******************************************************************************************************/
 char IntToChar(const int c) {
 	switch (c) {
@@ -208,7 +208,7 @@ char IntToChar(const int c) {
 }
 
 /************************************************************************************************
- Funkcja czytaj¹ca 16-znakowe ³añcuchy steruj¹ce
+ Funkcja czytajaca 16-znakowe lancuchy sterujace
  *************************************************************************************************/
 void read_string() {
 	char d[16];
@@ -217,7 +217,7 @@ void read_string() {
 		while (USART_GetFlagStatus(USART3, USART_FLAG_RXNE) == SET) {
 			d[i] = USART_ReceiveData(USART3);
 
-			/* funkcja filtruj¹ca czy odebrane dane s¹ prawid³owe (s¹ liczb¹) */
+			/* funkcja filtrujaca czy odebrane dane sa prawidlowe (sa liczba) */
 			if (d[i] == '1' || d[i] == '2' || d[i] == '3' || d[i] == '4'
 					|| d[i] == '5' || d[i] == '6' || d[i] == '7' || d[i] == '8'
 					|| d[i] == '9' || d[i] == '0')
@@ -225,7 +225,7 @@ void read_string() {
 		}
 	}
 
-	/* konwertowanie ³añcuchów znakowych do poszczególnych zmiennych sterujacy */
+	/* konwertowanie lancuchow znakowych do poszczegolnych zmiennych sterujacy */
 	dane_serwo = CharToInt(d[0]) * 1000 + CharToInt(d[1]) * 100
 			+ CharToInt(d[2]) * 10 + CharToInt(d[3]);
 	dane_silnik1 = CharToInt(d[4]) * 10000 + CharToInt(d[5]) * 1000
@@ -237,7 +237,7 @@ void read_string() {
 }
 
 /************************************************************************************************
- Funkcje umo¿liwiaj¹ce wysy³anie ³añcuchów znakowych
+ Funkcje umozliwiajace wysylanie lancuchow znakowych
  *************************************************************************************************/
 void send_char(char c) {
 	while (USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET)
@@ -252,29 +252,29 @@ void send_string(const char* s) {
 }
 
 /************************************************************************************************
- Funckja wykonujaca siê podczas wywo³ania przerwania dla USARTa
+ Funckja wykonujaca sie podczas wywolania przerwania dla USARTa
  ************************************************************************************************/
 void USART3_IRQHandler(void) {
 	if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET) {
-		read_string(); // odczytanie ³añcuchu sterujacego
+		read_string(); // odczytanie lancuchu sterujacego
 		licznik = 0; // resetuje licznik, gdy odbierze dane
-		odl = UB_HCSR04_Distance_cm(); //odczytywanie odleg³osci z czujnika odleglosci HC04
+		odl = UB_HCSR04_Distance_cm(); //odczytywanie odleglosci z czujnika odleglosci HC04
 
-		/* konwertowanie odleglosci do lancuhu znaków */
+		/* konwertowanie odleglosci do lancucha znakow */
 		int8_t s = (int) (odl / 100);
 		do_wyslania[0] = IntToChar(s);
 		int8_t d = (int) ((odl - 100 * s) / 10);
 		do_wyslania[1] = IntToChar(d);
 		int8_t j = odl - 100 * s - d * 10;
 		do_wyslania[2] = IntToChar(j);
-		send_string(do_wyslania); // wys³anie odleglosci odczyntanej z HC04 do kontolera
+		send_string(do_wyslania); // wyslanie odleglosci odczytanej z HC04 do kontolera
 		while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET) {
 		}
 	}
 }
 
 /***************************************************************************************************
- Funckja inicjalizuj¹ca zegar TIM4 dla PWM
+ Funckja inicjalizujaca zegar TIM4 dla PWM
  ***************************************************************************************************/
 void Timer4() {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
@@ -288,7 +288,7 @@ void Timer4() {
 }
 
 /***************************************************************************************************
- Funkcja inicjalizuj¹ca PWM
+ Funkcja inicjalizujaca PWM
  ***************************************************************************************************/
 void PWM() {
 	TIM_OCInitTypeDef TIM_OCInitStructure;
@@ -299,7 +299,7 @@ void PWM() {
 	TIM_OCInitStructure.TIM_Pulse = 0;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
 
-	/* KONFIGURACJA 1 KANA£U */
+	/* KONFIGURACJA 1 KANALU */
 	TIM_OC1Init(TIM4, &TIM_OCInitStructure);
 	TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);
 	GPIO_PinAFConfig(GPIOB, GPIO_PinSource6, GPIO_AF_TIM4);
@@ -307,7 +307,7 @@ void PWM() {
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-	/* KONFIGURACJA 2 KANA£U */
+	/* KONFIGURACJA 2 KANALU */
 	TIM_OC2Init(TIM4, &TIM_OCInitStructure);
 	TIM_OC2PreloadConfig(TIM4, TIM_OCPreload_Enable);
 	GPIO_PinAFConfig(GPIOB, GPIO_PinSource7, GPIO_AF_TIM4);
@@ -315,7 +315,7 @@ void PWM() {
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-	/* KONFIGURACJA 3 KANA£U */
+	/* KONFIGURACJA 3 KANALU */
 	TIM_OC3Init(TIM4, &TIM_OCInitStructure);
 	TIM_OC3PreloadConfig(TIM4, TIM_OCPreload_Enable);
 	GPIO_PinAFConfig(GPIOB, GPIO_PinSource8, GPIO_AF_TIM4);
@@ -334,42 +334,42 @@ void PWM() {
 
 int main(void) {
 	SystemInit();
-	Zegar(); // inicjalizacja zegarów
+	Zegar(); // inicjalizacja zegarow
 	Config_Tx(); // konfiguracja linii TX
 	Config_Rx(); // konfiguracja linii RX
 	Config_USART(); //konfiguracja USART
-	Config_NVIC(); // konfiguracja przerwañ USART
+	Config_NVIC(); // konfiguracja przerwan USART
 	USART_Cmd(USART3, ENABLE); // uruchomienie USART
-	NVIC_EnableIRQ(USART3_IRQn); // w³¹czenie przerwañ dla USART
-	GPIO(); // inicjalizacja portów GPIO
-	Timer4(); // konfikuracja zegara TIM4
+	NVIC_EnableIRQ(USART3_IRQn); // wlaczenie przerwan dla USART
+	GPIO(); // inicjalizacja portow GPIO
+	Timer4(); // konfiguracja zegara TIM4
 	PWM(); // inicjalizacja i konfiguracja PWM
 
-	/* ustawienie zegara SySTick tak by odmierza³ 1ms */
+	/* ustawienie zegara SySTick tak by odmierzal 1ms */
 	if (SysTick_Config(SystemCoreClock / 1000)) {
 		while (1)
 			;
 	}
 
-	/* g³ówna pêtla programu */
+	/* glowna petla programu */
 	while (1) {
-		/* umozliwia zmianê kierunku oborótów silnika napedz¹j¹cego */
-		if (kierunek_silnik1 != 0) { // jesli nie zero to kierunek w przód
+		/* umozliwia zmiane kierunku oborotow silnika napedzajacego */
+		if (kierunek_silnik1 != 0) { // jesli nie zero to kierunek w przod
 			GPIO_ResetBits(GPIOE, GPIO_Pin_7);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_9);
 
 			GPIO_SetBits(GPIOE, GPIO_Pin_7);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_9);
 		}
-		if (kierunek_silnik1 == 0) { // jesli zero to kierunek w ty³
+		if (kierunek_silnik1 == 0) { // jesli zero to kierunek w tyl
 			GPIO_ResetBits(GPIOE, GPIO_Pin_7);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_9);
 
 			GPIO_ResetBits(GPIOE, GPIO_Pin_7);
 			GPIO_SetBits(GPIOE, GPIO_Pin_9);
 		}
-		/* umozliwia zmianê kierunku obórótów silika unosz¹cego */
-		if (kierunek_silnik2 != 0) { // jesli nie zero to kierunek unosz¹cy
+		/* umozliwia zmiana kierunku oborotow silika unoszacego */
+		if (kierunek_silnik2 != 0) { // jesli nie zero to kierunek unoszacy
 			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_10);
 
@@ -383,17 +383,17 @@ int main(void) {
 			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
 			GPIO_SetBits(GPIOE, GPIO_Pin_10);
 		}
-		/* sprawdza czy licznik przekroczy³ 2000 (2sekundy) */
+		/* sprawdza czy licznik przekroczyl 2000 (2sekundy) */
 		if (licznik < 2000) { // jesli mniej to praca normalna
-			TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzaj¹cego
+			TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzajacego
 			TIM4->CCR2 = dane_silnik2; // przypisanie wartosci PWM do silnika unoszacego
 			TIM4->CCR3 = dane_serwo; // przypisanie wartosci PWM do serwa
-		} else { // w przeciwnym wypadku wy³¹cz silniki
+		} else { // w przeciwnym wypadku wylacz silniki
 			TIM4->CCR1 = 0;
 			TIM4->CCR2 = 0;
 			TIM4->CCR3 = 1200;
 		}
-		Delay(100); // opóŸnienie 0.1s
-		licznik+=100; // zwiêksza licznik o ilosc milisekund opoŸnienia
+		Delay(100); // opoznienie 0.1s
+		licznik+=100; // zwieksza licznik o ilosc milisekund opoznienia
 	}
 }
