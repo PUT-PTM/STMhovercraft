@@ -21,8 +21,8 @@ class NiebieskiZab():
 		self.ADRES_PODUSZKOWCA = "20:15:12:14:51:53"
 		self.PORT = 1
 
-		#self.socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM) # utworzenie gniazda
-		#self.socket.connect((ADRES_PODUSZKOWCA, PORT))
+		self.socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM) # utworzenie gniazda
+		self.socket.connect((self.ADRES_PODUSZKOWCA, self.PORT))
 
 	def komunikacja(self):
 		global KOD_STERUJACY
@@ -115,7 +115,7 @@ class Gui():
 		global SwitchOff
 		SwitchOff = True
 		self.blutacz = NiebieskiZab()
-		self.watek_blutacza = threading.Thread(target=self.blutacz.test)
+		self.watek_blutacza = threading.Thread(target=self.blutacz.komunikacja)
 		self.watek_blutacza.start()
 
 	def zamknij(self):

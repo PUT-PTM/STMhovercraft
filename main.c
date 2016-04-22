@@ -42,6 +42,7 @@ volatile uint8_t kierunek_silnik1 = 1; // silnik napedzajacy, kierunek w przód
 volatile uint8_t kierunek_silnik2 = 1; // silnik unoszacy, kierunek unoszacy
 volatile float odl = 0; // zmienna przechowuj¹ca odleg³osc w cm, od przeszkody z czujnika HC04
 char* do_wyslania = "000"; // ³añcuch znaków przeznaczony do wys³ania do kontrolera
+volatile uint8_t licznik = 0; // s³u¿y do sprawdzania jak d³ugo nie odebrano nowych danych
 
 /*******************************************************************************************************
  Funkcje inicjalizujace zegar SysTtick
@@ -256,6 +257,7 @@ void send_string(const char* s) {
 void USART3_IRQHandler(void) {
 	if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET) {
 		read_string(); // odczytanie ³añcuchu sterujacego
+		licznik = 0; // resetuje licznik, gdy odbierze dane
 		odl = UB_HCSR04_Distance_cm(); //odczytywanie odleg³osci z czujnika odleglosci HC04
 
 		/* konwertowanie odleglosci do lancuhu znaków */
@@ -381,9 +383,17 @@ int main(void) {
 			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
 			GPIO_SetBits(GPIOE, GPIO_Pin_10);
 		}
-		TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzaj¹cego
-		TIM4->CCR2 = dane_silnik2; // przypisanie wartosci PWM do silnika unoszacego
-		TIM4->CCR3 = dane_serwo; // przypisanie wartosci PWM do serwa
+		/* sprawdza czy licznik przekroczy³ 2000 (2sekundy) */
+		if (licznik < 2000) { // jesli mniej to praca normalna
+			TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzaj¹cego
+			TIM4->CCR2 = dane_silnik2; // przypisanie wartosci PWM do silnika unoszacego
+			TIM4->CCR3 = dane_serwo; // przypisanie wartosci PWM do serwa
+		} else { // w przeciwnym wypadku wy³¹cz silniki
+			TIM4->CCR1 = 0;
+			TIM4->CCR2 = 0;
+			TIM4->CCR3 = 1200;
+		}
 		Delay(100); // opóŸnienie 0.1s
+		licznik+=100; // zwiêksza licznik o ilosc milisekund opoŸnienia
 	}
 }
