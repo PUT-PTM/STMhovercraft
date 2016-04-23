@@ -1,11 +1,11 @@
 /*************************************************************************************************************
  *														 PINY:
  * B8 - serwo
- * B7 - silnik 2 (unosz¹cy)
- * B6 - silnik 1 (napêd)
+ * B7 - silnik 2 (unoszacy)
+ * B6 - silnik 1 (naped)
  *
- * E7 i E9 - piny seruj¹ce silnikiem 1
- * E10 i E12 - piny steruj¹ce silnikiem 2
+ * E7 i E9 - piny sterujace silnikiem 1
+ * E10 i E12 - piny sterujace silnikiem 2
  *
  * C10 - linia TX
  * C11 - linia RX
@@ -13,14 +13,14 @@
  * PD3 - wyzwalacz czujnika HC04
  * PA0 - echo czujnika HC04
  *
- * 													Dane steruj¹ce:
+ * 													Dane sterujace:
  * xxxxyyyyyyzzzzzab
  * x - skrêt serwa
  * y - obroty silnika 1
  * z - obroty silnika 2
- * a - kierunek obrotu silnika 1
- * b - kierunek obrotów silnika 2
- * np. 1200655006550011 - jazda prosto z maksymaln¹ prêdkosci¹
+ * a - kierunek obrotow silnika 1
+ * b - kierunek obrotow silnika 2
+ * np. 1200655006550011 - jazda prosto z maksymalna predkoscia
  *************************************************************************************************************/
 
 #include "stm32f4xx_gpio.h"
@@ -258,15 +258,14 @@ void USART3_IRQHandler(void) {
 	if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET) {
 		read_string(); // odczytanie lancuchu sterujacego
 		licznik = 0; // resetuje licznik, gdy odbierze dane
-		odl = UB_HCSR04_Distance_cm(); //odczytywanie odleglosci z czujnika odleglosci HC04
-
-		/* konwertowanie odleglosci do lancucha znakow */
+		/*odl = UB_HCSR04_Distance_cm(); //odczytywanie odleglosci z czujnika odleglosci HC04
+		// konwertowanie odleglosci do lancucha znakow
 		int8_t s = (int) (odl / 100);
 		do_wyslania[0] = IntToChar(s);
 		int8_t d = (int) ((odl - 100 * s) / 10);
 		do_wyslania[1] = IntToChar(d);
 		int8_t j = odl - 100 * s - d * 10;
-		do_wyslania[2] = IntToChar(j);
+		do_wyslania[2] = IntToChar(j);*/
 		send_string(do_wyslania); // wyslanie odleglosci odczytanej z HC04 do kontolera
 		while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET) {
 		}
@@ -331,7 +330,6 @@ void PWM() {
 /*******************************************************************************************
  MAIN
  *******************************************************************************************/
-
 int main(void) {
 	SystemInit();
 	Zegar(); // inicjalizacja zegarow
@@ -344,6 +342,7 @@ int main(void) {
 	GPIO(); // inicjalizacja portow GPIO
 	Timer4(); // konfiguracja zegara TIM4
 	PWM(); // inicjalizacja i konfiguracja PWM
+	//UB_HCSR04_Init(); // inicjalizacja czujnika odlegosci HC04
 
 	/* ustawienie zegara SySTick tak by odmierzal 1ms */
 	if (SysTick_Config(SystemCoreClock / 1000)) {
@@ -355,45 +354,39 @@ int main(void) {
 	while (1) {
 		/* umozliwia zmiane kierunku oborotow silnika napedzajacego */
 		if (kierunek_silnik1 != 0) { // jesli nie zero to kierunek w przod
-			GPIO_ResetBits(GPIOE, GPIO_Pin_7);
-			GPIO_ResetBits(GPIOE, GPIO_Pin_9);
-
 			GPIO_SetBits(GPIOE, GPIO_Pin_7);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_9);
 		}
 		if (kierunek_silnik1 == 0) { // jesli zero to kierunek w tyl
 			GPIO_ResetBits(GPIOE, GPIO_Pin_7);
-			GPIO_ResetBits(GPIOE, GPIO_Pin_9);
-
-			GPIO_ResetBits(GPIOE, GPIO_Pin_7);
 			GPIO_SetBits(GPIOE, GPIO_Pin_9);
 		}
-		/* umozliwia zmiana kierunku oborotow silika unoszacego */
+		/* umozliwia zmiana kierunku oborotow silnika unoszacego */
 		if (kierunek_silnik2 != 0) { // jesli nie zero to kierunek unoszacy
-			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
-			GPIO_ResetBits(GPIOE, GPIO_Pin_10);
-
 			GPIO_SetBits(GPIOE, GPIO_Pin_12);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_10);
 		}
 		if (kierunek_silnik2 == 0) { // jesli zero to kierunek zasycaj¹cy
 			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
-			GPIO_ResetBits(GPIOE, GPIO_Pin_10);
-
-			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
 			GPIO_SetBits(GPIOE, GPIO_Pin_10);
 		}
-		/* sprawdza czy licznik przekroczyl 2000 (2sekundy) */
-		if (licznik < 2000) { // jesli mniej to praca normalna
+		/* sprawdza czy licznik przekroczyl 10000 (okolo 10 sekund) */
+		if (licznik < 10000) { // jesli mniej to praca normalna
 			TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzajacego
 			TIM4->CCR2 = dane_silnik2; // przypisanie wartosci PWM do silnika unoszacego
 			TIM4->CCR3 = dane_serwo; // przypisanie wartosci PWM do serwa
+			licznik+=100; // zwieksza licznik o ilosc milisekund opoznienia
 		} else { // w przeciwnym wypadku wylacz silniki
 			TIM4->CCR1 = 0;
 			TIM4->CCR2 = 0;
 			TIM4->CCR3 = 1200;
+			// hamowanie silnika 2
+			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
+			GPIO_ResetBits(GPIOE, GPIO_Pin_10);
+			// hamowanie silnika 1
+			GPIO_ResetBits(GPIOE, GPIO_Pin_9);
+			GPIO_ResetBits(GPIOE, GPIO_Pin_7);
 		}
 		Delay(100); // opoznienie 0.1s
-		licznik+=100; // zwieksza licznik o ilosc milisekund opoznienia
 	}
 }
