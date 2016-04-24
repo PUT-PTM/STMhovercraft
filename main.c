@@ -1,15 +1,17 @@
 /*************************************************************************************************************
  *														 PINY:
- * B8 - serwo
- * B7 - silnik 2 (unoszacy)
- * B6 - silnik 1 (naped)
+ * B8 - serwo PWM
+ * B7 - silnik 2 PWM (unoszacy)
+ * B6 - silnik 1 PWM (naped)
  *
  * E7 i E9 - piny sterujace silnikiem 1
  * E10 i E12 - piny sterujace silnikiem 2
  *
+ *Bluetooth:
  * C10 - linia TX
  * C11 - linia RX
  *
+ *Czujnik HC04:
  * PD3 - wyzwalacz czujnika HC04
  * PA0 - echo czujnika HC04
  *
@@ -34,7 +36,6 @@
 
 static __IO uint32_t TimingDelay; // zmienna pomocna do zegara SysTick
 char odebrane[16]; // lancuch znakow przeznaczony do zbierania odbieranych danych
-/* Inicjalizacja zmiennych sterujacych */
 volatile uint16_t dane_serwo = 1200; // wartosc srodkowa serwa
 volatile uint16_t dane_silnik1 = 0; // silnik napedzajacy, wylaczony, maks 65500, min 0
 volatile uint16_t dane_silnik2 = 0; // silnik unoszacy, wylaczony, wlaczony 65500
@@ -42,6 +43,8 @@ volatile uint8_t kierunek_silnik1 = 1; // silnik napedzajacy, kierunek w przod
 volatile uint8_t kierunek_silnik2 = 1; // silnik unoszacy, kierunek unoszacy
 volatile float odl = 0; // zmienna przechowujaca odleglosc w cm, od przeszkody z czujnika HC04
 char* do_wyslania = "000"; // lancuch znakow przeznaczony do wyslania do kontrolera
+volatile int sprawdz = 0; // licznik zapobiegajacy utknieciu w petli w przypadku zlego odebrania danych
+volatile int licznik_danych = 0; // licznik odebranych wlasciwie danych
 volatile uint8_t licznik = 0; // sluzy do sprawdzania jak dlugo nie odebrano nowych danych
 
 /*******************************************************************************************************
@@ -112,7 +115,6 @@ void Config_USART() {
 /******************************************************************************************************
  Funkcje konfigurujace piny TX i RX wykorzystywane przy transmisji danych
  *******************************************************************************************************/
-
 void Config_Tx() {
 	// konfiguracja linii Tx
 	GPIO_PinAFConfig(GPIOC, GPIO_PinSource10, GPIO_AF_USART3);
@@ -211,29 +213,59 @@ char IntToChar(const int c) {
  Funkcja czytajaca 16-znakowe lancuchy sterujace
  *************************************************************************************************/
 void read_string() {
-	char d[16];
-	uint8_t i = 0;
-	for (i = 0; i < 16;) {
+	char d[16]; // roboczy lancuch znakow
+	licznik_danych = 0; // licznik odebranych wlasciwie danych
+	sprawdz = 0; // licznik zapobiegajacy utknieciu w petli w przypadku zlego odebrania danych
+	for (licznik_danych = 0; licznik_danych < 16;) {
+		sprawdz++;
 		while (USART_GetFlagStatus(USART3, USART_FLAG_RXNE) == SET) {
-			d[i] = USART_ReceiveData(USART3);
+			d[licznik_danych] = USART_ReceiveData(USART3);
 
 			/* funkcja filtrujaca czy odebrane dane sa prawidlowe (sa liczba) */
-			if (d[i] == '1' || d[i] == '2' || d[i] == '3' || d[i] == '4'
-					|| d[i] == '5' || d[i] == '6' || d[i] == '7' || d[i] == '8'
-					|| d[i] == '9' || d[i] == '0')
-				i++;
+			if (d[licznik_danych] == '1' || d[licznik_danych] == '2'
+					|| d[licznik_danych] == '3' || d[licznik_danych] == '4'
+					|| d[licznik_danych] == '5' || d[licznik_danych] == '6'
+					|| d[licznik_danych] == '7' || d[licznik_danych] == '8'
+					|| d[licznik_danych] == '9' || d[licznik_danych] == '0') {
+				licznik_danych++;
+				sprawdz = 0;
+			}
+		}
+		// jesli przekroczono dopuszczalny prog bledu to wyjdz z petli i anuluj dane
+		if (sprawdz > 30000) {
+			licznik_danych = 0;
+			break;
 		}
 	}
+	// przypisuje tylko dane odebrane we wlasciwy sposob
+	if (licznik_danych == 16) {
+		/* konwertowanie lancuchow znakowych do poszczegolnych zmiennych sterujacy */
+		dane_serwo = CharToInt(d[0]) * 1000 + CharToInt(d[1]) * 100
+				+ CharToInt(d[2]) * 10 + CharToInt(d[3]);
+		dane_silnik1 = CharToInt(d[4]) * 10000 + CharToInt(d[5]) * 1000
+				+ CharToInt(d[6]) * 100 + CharToInt(d[7]) * 10
+				+ CharToInt(d[8]);
+		dane_silnik2 = CharToInt(d[9]) * 10000 + CharToInt(d[10]) * 1000
+				+ CharToInt(d[11]) * 100 + CharToInt(d[12]) * 10
+				+ CharToInt(d[13]);
+		kierunek_silnik1 = CharToInt(d[14]);
+		kierunek_silnik2 = CharToInt(d[15]);
+	}
+}
 
-	/* konwertowanie lancuchow znakowych do poszczegolnych zmiennych sterujacy */
-	dane_serwo = CharToInt(d[0]) * 1000 + CharToInt(d[1]) * 100
-			+ CharToInt(d[2]) * 10 + CharToInt(d[3]);
-	dane_silnik1 = CharToInt(d[4]) * 10000 + CharToInt(d[5]) * 1000
-			+ CharToInt(d[6]) * 100 + CharToInt(d[7]) * 10 + CharToInt(d[8]);
-	dane_silnik2 = CharToInt(d[9]) * 10000 + CharToInt(d[10]) * 1000
-			+ CharToInt(d[11]) * 100 + CharToInt(d[12]) * 10 + CharToInt(d[13]);
-	kierunek_silnik1 = CharToInt(d[14]);
-	kierunek_silnik2 = CharToInt(d[15]);
+/************************************************************************************************
+ Funkcje umozliwiajace wysylanie lancuchow znakowych
+ *************************************************************************************************/
+void send_char(char c) {
+	while (USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET)
+		;
+	USART_SendData(USART3, c);
+}
+
+void send_string(const char* s) {
+	while (*s) {
+		send_char(*s++);
+	}
 }
 
 /************************************************************************************************
@@ -259,14 +291,15 @@ void USART3_IRQHandler(void) {
 		read_string(); // odczytanie lancuchu sterujacego
 		licznik = 0; // resetuje licznik, gdy odbierze dane
 		/*odl = UB_HCSR04_Distance_cm(); //odczytywanie odleglosci z czujnika odleglosci HC04
-		// konwertowanie odleglosci do lancucha znakow
-		int8_t s = (int) (odl / 100);
-		do_wyslania[0] = IntToChar(s);
-		int8_t d = (int) ((odl - 100 * s) / 10);
-		do_wyslania[1] = IntToChar(d);
-		int8_t j = odl - 100 * s - d * 10;
-		do_wyslania[2] = IntToChar(j);*/
-		send_string(do_wyslania); // wyslanie odleglosci odczytanej z HC04 do kontolera
+		 // konwertowanie odleglosci do lancucha znakow
+		 int8_t s = (int) (odl / 100);
+		 do_wyslania[0] = IntToChar(s);
+		 int8_t d = (int) ((odl - 100 * s) / 10);
+		 do_wyslania[1] = IntToChar(d);
+		 int8_t j = odl - 100 * s - d * 10;
+		 do_wyslania[2] = IntToChar(j);*/
+		if (licznik_danych == 16)
+			send_string(do_wyslania); // wyslanie odleglosci odczytanej z HC04 do kontolera
 		while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET) {
 		}
 	}
@@ -375,7 +408,7 @@ int main(void) {
 			TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzajacego
 			TIM4->CCR2 = dane_silnik2; // przypisanie wartosci PWM do silnika unoszacego
 			TIM4->CCR3 = dane_serwo; // przypisanie wartosci PWM do serwa
-			licznik+=100; // zwieksza licznik o ilosc milisekund opoznienia
+			licznik += 100; // zwieksza licznik o ilosc milisekund opoznienia
 		} else { // w przeciwnym wypadku wylacz silniki
 			TIM4->CCR1 = 0;
 			TIM4->CCR2 = 0;
