@@ -52,7 +52,7 @@ class NiebieskiZab():
 
 	def __del__(self):
 		pass
-		#self.socket.close()
+		self.socket.close()
 
 class Gui():
 	def __init__(self):
