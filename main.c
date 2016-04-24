@@ -35,7 +35,6 @@
 #include "stm32_ub_hcsr04.h"
 
 static __IO uint32_t TimingDelay; // zmienna pomocna do zegara SysTick
-char odebrane[16]; // lancuch znakow przeznaczony do zbierania odbieranych danych
 volatile uint16_t dane_serwo = 1200; // wartosc srodkowa serwa
 volatile uint16_t dane_silnik1 = 0; // silnik napedzajacy, wylaczony, maks 65500, min 0
 volatile uint16_t dane_silnik2 = 0; // silnik unoszacy, wylaczony, wlaczony 65500
@@ -299,7 +298,7 @@ void USART3_IRQHandler(void) {
 		 int8_t j = odl - 100 * s - d * 10;
 		 do_wyslania[2] = IntToChar(j);*/
 		if (licznik_danych == 16)
-			send_string(do_wyslania); // wyslanie odleglosci odczytanej z HC04 do kontolera
+			send_string(do_wyslania); // wyslanie odleglosci odczytanej z HC04 do kontrolera
 		while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET) {
 		}
 	}

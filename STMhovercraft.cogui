@@ -31,7 +31,7 @@
 </editor>
 <editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" partName="main.c" path="E:/Maciej/Maciej/studia/STM32/Projekt_poduszkowiec/GIT/STMhovercraft/main.c" title="main.c" tooltip="E:/Maciej/Maciej/studia/STM32/Projekt_poduszkowiec/GIT/STMhovercraft/main.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/STMhovercraft/main.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="369" selectionTopPixel="540"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="11360" selectionTopPixel="6642"/>
 </editor>
 </editors>
 <views>
