@@ -1,4 +1,14 @@
 # Hovercraft
+Projekt budowy i zaprogramowania poduszkowca zdalnie sterowanego.
+
+## Potrzebne materiały
+- mikrokontroler STM32f4
+- moduł Bluetooth do komunikacji z pilotem (lub aplikacją komputerową)
+- czujnik odległości HC04
+- korpus poduszkowca
+- serwomachanizm
+- dwa silniki ze śmigłami
+
 ### Opis PIN'ów
 - B8 - serwo PWM 
 - B7 - silnik 2 PWM (unoszący)
