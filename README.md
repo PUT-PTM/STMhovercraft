@@ -5,13 +5,16 @@
 - B6 - silnik 1 PWM (napęd)
 - E7 i E9 - piny sterujące silnikiem 1
 - E10 i E12 - piny sterujące silnikiem 2
+
 ### Bluetooth:
 - C10 - linia TX
 - C11 - linia RX
+
 ### Czujnik HC04:
 - PD3 - wyzwalacz czujnika HC04
 - PA0 - echo czujnika HC04
-## Dane sterujace:
+
+### Dane sterujace:
 - schemat: xxxxyyyyyyzzzzzab
 - x - skręt serwa
 - y - obroty silnika 1
