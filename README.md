@@ -8,6 +8,7 @@ Projekt budowy i zaprogramowania poduszkowca zdalnie sterowanego.
 - korpus poduszkowca
 - serwomachanizm
 - dwa silniki ze śmigłami
+- bateria
 
 ### Opis PIN'ów
 - B8 - serwo PWM 
