@@ -1,13 +1,21 @@
-<h1> Opis PIN'ów </h1><br /><br />
-
- <li> B8 - serwo PWM </li>
- <li> B7 - silnik 2 PWM (unoszacy)</li>
- <li> B6 - silnik 1 PWM (naped)</li>
- <li> E7 i E9 - piny sterujace silnikiem 1</li>
- <li> E10 i E12 - piny sterujace silnikiem 2</li>
-	<h3>Bluetooth: </h3><br /> 
- <li> C10 - linia TX</li>
- <li> C11 - linia RX</li>
- 	<h3>Czujnik HC04:</h3><br />
- <li> PD3 - wyzwalacz czujnika HC04</li>
- <li> PA0 - echo czujnika HC04</li>
+# Hovercraft
+### Opis PIN'ów
+- B8 - serwo PWM 
+- B7 - silnik 2 PWM (unoszący)
+- B6 - silnik 1 PWM (napęd)
+- E7 i E9 - piny sterujące silnikiem 1
+- E10 i E12 - piny sterujące silnikiem 2
+### Bluetooth:
+- C10 - linia TX
+- C11 - linia RX
+### Czujnik HC04:
+- PD3 - wyzwalacz czujnika HC04
+- PA0 - echo czujnika HC04
+## Dane sterujace:
+- schemat: xxxxyyyyyyzzzzzab
+- x - skręt serwa
+- y - obroty silnika 1
+- z - obroty silnika 2
+- a - kierunek obrotóww silnika 1
+- b - kierunek obrotóww silnika 2
+- np. 1200655006550011 - jazda prosto z maksymalną prędkością
