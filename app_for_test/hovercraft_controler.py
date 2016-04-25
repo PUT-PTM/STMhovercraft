@@ -37,7 +37,8 @@ class NiebieskiZab():
 			self.socket.send(message)
 			response = self.socket.recv(1024)
 			WallWarning = str(response)
-			time.sleep(0.5)
+			time.sleep(1)
+		self.socket.send("1200000000000011") # po rozlaczeniu wylacza silnik tylny
 
 	def test(self):
 		global WallWarning
@@ -51,7 +52,6 @@ class NiebieskiZab():
 			time.sleep(1)
 
 	def __del__(self):
-		pass
 		self.socket.close()
 
 class Gui():
