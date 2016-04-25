@@ -268,21 +268,6 @@ void send_string(const char* s) {
 }
 
 /************************************************************************************************
- Funkcje umozliwiajace wysylanie lancuchow znakowych
- *************************************************************************************************/
-void send_char(char c) {
-	while (USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET)
-		;
-	USART_SendData(USART3, c);
-}
-
-void send_string(const char* s) {
-	while (*s) {
-		send_char(*s++);
-	}
-}
-
-/************************************************************************************************
  Funckja wykonujaca sie podczas wywolania przerwania dla USARTa
  ************************************************************************************************/
 void USART3_IRQHandler(void) {
