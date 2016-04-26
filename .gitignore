@@ -2,3 +2,9 @@
 *.elf
 *.hex
 \STMhovercraft
+STMhovercraft/Debug/bin/history.xml
+STMhovercraft/Debug/bin/STMhovercraft.map
+STMhovercraft/Debug/obj/history.xml
+STMhovercraft/Debug/obj/main.o
+*.o
+STMhovercraft/STMhovercraft.elf.xcodeproj/project.pbxproj
