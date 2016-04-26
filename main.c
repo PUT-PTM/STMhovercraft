@@ -1,4 +1,4 @@
-/*************************************************************************************************************
+/******************************************************************************************************
  *														 PINY:
  * B8 - serwo PWM
  * B7 - silnik 2 PWM (unoszacy)
@@ -16,14 +16,13 @@
  * PA0 - echo czujnika HC-Sr04
  *
  * 													Dane sterujace:
- * xxxxyyyyyyzzzzzab
- * x - skret serwa
- * y - obroty silnika 1
- * z - obroty silnika 2
- * a - kierunek obrotow silnika 1
- * b - kierunek obrotow silnika 2
- * np. 1200655006550011 - jazda prosto z maksymalna predkoscia
- *************************************************************************************************************/
+ * xyzab
+ * x - skret serwa w wartosciach miedzy 0, a 85
+ * y - obroty silnika 1 w wartosciach miedzy 0, a 120
+ * z - obroty silnika 2 w wartosciach miedzy 0, a 120
+ * a - kierunek obrotow silnika 1 w wartosciach 0 lub 1
+ * b - kierunek obrotow silnika 2 w wartosciach 0 lub 1
+ ******************************************************************************************************/
 
 #include "stm32f4xx_gpio.h"
 #include "stm32f4xx_rcc.h"
