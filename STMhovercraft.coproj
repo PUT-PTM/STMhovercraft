@@ -79,7 +79,7 @@
     <Component id="526" name="SYSCFG" path="" type="2"/>
   </Components>
   <Files>
-    <File name="cmsis_lib/source/stm32_ub_hcsr04.c" path="../../../czyjnik HC-SR04/biblioteka HCSR04/stm32_ub_hcsr04.c" type="1"/>
+    <File name="cmsis_lib/source/stm32_ub_hcsr04.c" path="Biblioteka HC-Sr04/stm32_ub_hcsr04.c" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_gpio.c" path="cmsis_lib/source/stm32f4xx_gpio.c" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_usart.c" path="cmsis_lib/source/stm32f4xx_usart.c" type="1"/>
     <File name="cmsis_boot/startup/startup_stm32f4xx.c" path="cmsis_boot/startup/startup_stm32f4xx.c" type="1"/>
@@ -104,8 +104,8 @@
     <File name="cmsis_lib/source/stm32f4xx_tim.c" path="cmsis_lib/source/stm32f4xx_tim.c" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_gpio.h" path="cmsis_lib/include/stm32f4xx_gpio.h" type="1"/>
     <File name="cmsis_lib/include/misc.h" path="cmsis_lib/include/misc.h" type="1"/>
-    <File name="cmsis_lib/include/stm32_ub_hcsr04.h" path="../../../czyjnik HC-SR04/biblioteka HCSR04/stm32_ub_hcsr04.h" type="1"/>
     <File name="cmsis_boot/stm32f4xx_conf.h" path="cmsis_boot/stm32f4xx_conf.h" type="1"/>
+    <File name="cmsis_lib/include/stm32_ub_hcsr04.h" path="Biblioteka HC-Sr04/stm32_ub_hcsr04.h" type="1"/>
     <File name="cmsis_boot/system_stm32f4xx.h" path="cmsis_boot/system_stm32f4xx.h" type="1"/>
     <File name="cmsis_lib/include" path="" type="2"/>
     <File name="cmsis_lib/include/stm32f4xx_rcc.h" path="cmsis_lib/include/stm32f4xx_rcc.h" type="1"/>
