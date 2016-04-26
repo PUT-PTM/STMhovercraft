@@ -37,19 +37,8 @@ class NiebieskiZab():
 			self.socket.send(message)
 			response = self.socket.recv(1024)
 			WallWarning = str(response)
-			time.sleep(1)
+			time.sleep(0.5)
 		self.socket.send("1200000000000011") # po rozlaczeniu wylacza silnik tylny
-
-	def test(self):
-		global WallWarning
-		global SwitchOff
-		global KOD_STERUJACY
-		for i in range(100,110):
-			if not SwitchOff:
-				KOD_STERUJACY = "1200000000000011"
-				return
-			WallWarning = str(i)
-			time.sleep(1)
 
 	def __del__(self):
 		self.socket.close()
@@ -104,7 +93,7 @@ class Gui():
 		self.update_silnik()
 		self.update_serwo()
 
-		#self.top.protocol("WM_DELETE_WINDOW", self.quit_close)
+		self.top.protocol("WM_DELETE_WINDOW", self.quit_close)
 		self.refresh() # odswieza wartosci gdy nic nie jest przesylane przez Bluetooth
 		self.top.mainloop()
 
