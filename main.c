@@ -7,17 +7,17 @@
  * E7 i E9 - piny sterujace silnikiem 1
  * E10 i E12 - piny sterujace silnikiem 2
  *
- *Bluetooth:
+ *Bluetooth HC-05:
  * C10 - linia TX
  * C11 - linia RX
  *
- *Czujnik HC04:
- * PD3 - wyzwalacz czujnika HC04
- * PA0 - echo czujnika HC04
+ *Czujnik HC-Sr04:
+ * PD3 - wyzwalacz czujnika HC-Sr04
+ * PA0 - echo czujnika HC-Sr04
  *
  * 													Dane sterujace:
  * xxxxyyyyyyzzzzzab
- * x - skrêt serwa
+ * x - skret serwa
  * y - obroty silnika 1
  * z - obroty silnika 2
  * a - kierunek obrotow silnika 1
@@ -36,15 +36,14 @@
 
 static __IO uint32_t TimingDelay; // zmienna pomocna do zegara SysTick
 volatile uint16_t dane_serwo = 1200; // wartosc srodkowa serwa
-volatile uint16_t dane_silnik1 = 0; // silnik napedzajacy, wylaczony, maks 65500, min 0
-volatile uint16_t dane_silnik2 = 0; // silnik unoszacy, wylaczony, wlaczony 65500
+volatile uint16_t dane_silnik1 = 0; // silnik napedzajacy, wylaczony, maks 60000, min 0
+volatile uint16_t dane_silnik2 = 0; // silnik unoszacy, wylaczony, wlaczony 60000
 volatile uint8_t kierunek_silnik1 = 1; // silnik napedzajacy, kierunek w przod
 volatile uint8_t kierunek_silnik2 = 1; // silnik unoszacy, kierunek unoszacy
-volatile float odl = 0; // zmienna przechowujaca odleglosc w cm, od przeszkody z czujnika HC04
-char* do_wyslania = "000"; // lancuch znakow przeznaczony do wyslania do kontrolera
-volatile int sprawdz = 0; // licznik zapobiegajacy utknieciu w petli w przypadku zlego odebrania danych
-volatile int licznik_danych = 0; // licznik odebranych wlasciwie danych
-volatile uint8_t licznik = 0; // sluzy do sprawdzania jak dlugo nie odebrano nowych danych
+volatile uint8_t odl = 0; // zmienna przechowujaca odleglosc w cm, od przeszkody z czujnika HC-Sr04
+volatile uint16_t sprawdz = 0; // licznik zapobiegajacy utknieciu w petli w przypadku zlego odebrania danych
+volatile uint16_t licznik_danych = 0; // licznik odebranych wlasciwie danych
+volatile uint16_t licznik = 0; // sluzy do sprawdzania jak dlugo nie odebrano nowych danych
 
 /*******************************************************************************************************
  Funkcje inicjalizujace zegar SysTtick
@@ -74,7 +73,7 @@ void Zegar() {
 }
 
 /*******************************************************************************************************
- Funkcja inicjalizujaca portow GPIO
+ Funkcja inicjalizujaca porty GPIO
  ********************************************************************************************************/
 void GPIO() {
 	/* piny sterujace kierunkami silnikow */
@@ -148,87 +147,20 @@ void Config_NVIC() {
 	NVIC_Init(&NVIC_InitStructure);
 }
 
-/**********************************************************************************************************
- Funkcja pomocnicza wykorzystywana do konwertowania lancuchow znakowych na integer
- **********************************************************************************************************/
-int CharToInt(const char c) {
-	switch (c) {
-	case '0':
-		return 0;
-	case '1':
-		return 1;
-	case '2':
-		return 2;
-	case '3':
-		return 3;
-	case '4':
-		return 4;
-	case '5':
-		return 5;
-	case '6':
-		return 6;
-	case '7':
-		return 7;
-	case '8':
-		return 8;
-	case '9':
-		return 9;
-	default:
-		return 0;
-	}
-}
-
-/*****************************************************************************************************
- Funkcja pomocnicza wykorzystywana do konwertowania liczb na lancuchy znakowe
- ******************************************************************************************************/
-char IntToChar(const int c) {
-	switch (c) {
-	case 0:
-		return '0';
-	case 1:
-		return '1';
-	case 2:
-		return '2';
-	case 3:
-		return '3';
-	case 4:
-		return '4';
-	case 5:
-		return '5';
-	case 6:
-		return '6';
-	case 7:
-		return '7';
-	case 8:
-		return '8';
-	case 9:
-		return '9';
-	default:
-		return '0';
-	}
-}
-
 /************************************************************************************************
- Funkcja czytajaca 16-znakowe lancuchy sterujace
+ Funkcja czytajaca 5-znakowe lancuchy sterujace
  *************************************************************************************************/
 void read_string() {
-	char d[16]; // roboczy lancuch znakow
+	const int16_t dlugosc = 5;
+	uint8_t d[dlugosc]; // roboczy lancuch znakow
 	licznik_danych = 0; // licznik odebranych wlasciwie danych
 	sprawdz = 0; // licznik zapobiegajacy utknieciu w petli w przypadku zlego odebrania danych
-	for (licznik_danych = 0; licznik_danych < 16;) {
+	for (licznik_danych = 0; licznik_danych < dlugosc;) {
 		sprawdz++;
 		while (USART_GetFlagStatus(USART3, USART_FLAG_RXNE) == SET) {
 			d[licznik_danych] = USART_ReceiveData(USART3);
-
-			/* funkcja filtrujaca czy odebrane dane sa prawidlowe (sa liczba) */
-			if (d[licznik_danych] == '1' || d[licznik_danych] == '2'
-					|| d[licznik_danych] == '3' || d[licznik_danych] == '4'
-					|| d[licznik_danych] == '5' || d[licznik_danych] == '6'
-					|| d[licznik_danych] == '7' || d[licznik_danych] == '8'
-					|| d[licznik_danych] == '9' || d[licznik_danych] == '0') {
-				licznik_danych++;
-				sprawdz = 0;
-			}
+			licznik_danych++;
+			sprawdz = 0;
 		}
 		// jesli przekroczono dopuszczalny prog bledu to wyjdz z petli i anuluj dane
 		if (sprawdz > 30000) {
@@ -237,34 +169,23 @@ void read_string() {
 		}
 	}
 	// przypisuje tylko dane odebrane we wlasciwy sposob
-	if (licznik_danych == 16) {
+	if (licznik_danych == dlugosc) {
 		/* konwertowanie lancuchow znakowych do poszczegolnych zmiennych sterujacy */
-		dane_serwo = CharToInt(d[0]) * 1000 + CharToInt(d[1]) * 100
-				+ CharToInt(d[2]) * 10 + CharToInt(d[3]);
-		dane_silnik1 = CharToInt(d[4]) * 10000 + CharToInt(d[5]) * 1000
-				+ CharToInt(d[6]) * 100 + CharToInt(d[7]) * 10
-				+ CharToInt(d[8]);
-		dane_silnik2 = CharToInt(d[9]) * 10000 + CharToInt(d[10]) * 1000
-				+ CharToInt(d[11]) * 100 + CharToInt(d[12]) * 10
-				+ CharToInt(d[13]);
-		kierunek_silnik1 = CharToInt(d[14]);
-		kierunek_silnik2 = CharToInt(d[15]);
+		dane_serwo = (uint16_t)(d[0] * 20);
+		dane_silnik1 = (uint16_t)(d[1] * 500);
+		dane_silnik2 = (uint16_t)(d[2] * 500);
+		kierunek_silnik1 = d[3];
+		kierunek_silnik2 = d[4];
 	}
 }
 
 /************************************************************************************************
- Funkcje umozliwiajace wysylanie lancuchow znakowych
+ Funkcja wysylajaca char przez USART
  *************************************************************************************************/
-void send_char(char c) {
+void send_char(uint16_t c) {
 	while (USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET)
 		;
 	USART_SendData(USART3, c);
-}
-
-void send_string(const char* s) {
-	while (*s) {
-		send_char(*s++);
-	}
 }
 
 /************************************************************************************************
@@ -272,18 +193,10 @@ void send_string(const char* s) {
  ************************************************************************************************/
 void USART3_IRQHandler(void) {
 	if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET) {
-		read_string(); // odczytanie lancuchu sterujacego
-		licznik = 0; // resetuje licznik, gdy odbierze dane
-		/*odl = UB_HCSR04_Distance_cm(); //odczytywanie odleglosci z czujnika odleglosci HC04
-		 // konwertowanie odleglosci do lancucha znakow
-		 int8_t s = (int) (odl / 100);
-		 do_wyslania[0] = IntToChar(s);
-		 int8_t d = (int) ((odl - 100 * s) / 10);
-		 do_wyslania[1] = IntToChar(d);
-		 int8_t j = odl - 100 * s - d * 10;
-		 do_wyslania[2] = IntToChar(j);*/
-		if (licznik_danych == 16)
-			send_string(do_wyslania); // wyslanie odleglosci odczytanej z HC04 do kontrolera
+		read_string(); // odczytanie lancucha sterujacego
+		licznik = 0;
+		if (licznik_danych == 5)
+			send_char(odl); // wyslanie odleglosci odczytanej z HC-Sr04 do kontrolera
 		while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET) {
 		}
 	}
@@ -295,7 +208,7 @@ void USART3_IRQHandler(void) {
 void Timer4() {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	TIM_TimeBaseStructure.TIM_Period = 65500;
+	TIM_TimeBaseStructure.TIM_Period = 60000;
 	TIM_TimeBaseStructure.TIM_Prescaler = 83;
 	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
@@ -359,7 +272,7 @@ int main(void) {
 	GPIO(); // inicjalizacja portow GPIO
 	Timer4(); // konfiguracja zegara TIM4
 	PWM(); // inicjalizacja i konfiguracja PWM
-	//UB_HCSR04_Init(); // inicjalizacja czujnika odlegosci HC04
+	UB_HCSR04_Init(); // inicjalizacja czujnika odlegosci HC-Sr04
 
 	/* ustawienie zegara SySTick tak by odmierzal 1ms */
 	if (SysTick_Config(SystemCoreClock / 1000)) {
@@ -387,12 +300,11 @@ int main(void) {
 			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
 			GPIO_SetBits(GPIOE, GPIO_Pin_10);
 		}
-		/* sprawdza czy licznik przekroczyl 10000 (okolo 10 sekund) */
-		if (licznik < 10000) { // jesli mniej to praca normalna
+		/* sprawdza czy licznik przekroczyl 10000 (okolo 10 sekund) i czy odlegosc odczytana z czujnika jest wieksza od 20cm */
+		if (licznik < 5000 && odl > 20) { // jesli spelnione to praca normalna
 			TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzajacego
 			TIM4->CCR2 = dane_silnik2; // przypisanie wartosci PWM do silnika unoszacego
 			TIM4->CCR3 = dane_serwo; // przypisanie wartosci PWM do serwa
-			licznik += 100; // zwieksza licznik o ilosc milisekund opoznienia
 		} else { // w przeciwnym wypadku wylacz silniki
 			TIM4->CCR1 = 0;
 			TIM4->CCR2 = 0;
@@ -404,6 +316,9 @@ int main(void) {
 			GPIO_ResetBits(GPIOE, GPIO_Pin_9);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_7);
 		}
+		if(licznik < 10000)
+		licznik += 100; // zwieksza licznik o ilosc milisekund opoznienia
+		odl = (uint8_t)((UB_HCSR04_Distance_cm()+UB_HCSR04_Distance_cm())/2); //odczytywanie odleglosci z czujnika odleglosci HC-Sr04
 		Delay(100); // opoznienie 0.1s
 	}
 }
