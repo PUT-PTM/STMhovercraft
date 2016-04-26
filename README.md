@@ -3,12 +3,13 @@ Projekt budowy i zaprogramowania poduszkowca zdalnie sterowanego.
 
 ## Potrzebne materiały
 - mikrokontroler STM32f4
-- moduł Bluetooth do komunikacji z pilotem (lub aplikacją komputerową)
-- czujnik odległości HC04
+- moduł Bluetooth HC-05 do komunikacji z pilotem (lub aplikacją komputerową)
+- czujnik odległości HC-SR04
 - korpus poduszkowca
-- serwomachanizm
+- serwomachanizm S90
 - dwa silniki ze śmigłami
-- bateria
+- bateria 9.6V
+- sterownik L298 z radiatorem
 
 ### Opis PIN'ów
 - B8 - serwo PWM 
