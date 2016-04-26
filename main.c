@@ -17,7 +17,7 @@
  *
  * 													Dane sterujace:
  * xyzab
- * x - skret serwa w wartosciach miedzy 0, a 85
+ * x - skret serwa w wartosciach miedzy 35, a 85
  * y - obroty silnika 1 w wartosciach miedzy 0, a 120
  * z - obroty silnika 2 w wartosciach miedzy 0, a 120
  * a - kierunek obrotow silnika 1 w wartosciach 0 lub 1
