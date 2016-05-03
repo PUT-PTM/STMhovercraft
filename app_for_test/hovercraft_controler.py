@@ -9,8 +9,9 @@ import sys
 
 # ZMIENNE GLOBALNE
 
-KOD_STERUJACY = "1200000006550011"
-# [serwo * 4]	[naped_tylny * 5]	[naped_dolny * 5]	[kier_tylny * 1]	[kier_dolny * 1]
+KOD_STERUJACY = "6000012011" # 60 000 120 1 1
+# serwo silnik_tyl silnik_dol kierunek_tyl kierunek_dol
+
 WallWarning = "0"
 ZAMEK = threading.Lock()
 SwitchOff = True
@@ -38,7 +39,7 @@ class NiebieskiZab():
 			response = self.socket.recv(1024)
 			WallWarning = str(response)
 			time.sleep(0.5)
-		self.socket.send("1200000000000011") # po rozlaczeniu wylacza silnik tylny
+		self.socket.send("6000000011") # po rozlaczeniu wylacza silnik tylny
 
 	def __del__(self):
 		self.socket.close()
@@ -48,12 +49,12 @@ class Gui():
 
 		# ZMIENNE
 
-		self.UpDownStep = 500
-		self.LeftRightStep = 50
+		self.UpDownStep = 10
+		self.LeftRightStep = 5
 		self.MinUpDown = 0
-		self.MaxUpDown = 65500
-		self.MinLeftRight = 700
-		self.MaxLeftRight = 1700
+		self.MaxUpDown = 120
+		self.MinLeftRight = 35
+		self.MaxLeftRight = 85
 
 		# --------------------------------------------------------------------------------------------
 
@@ -93,7 +94,7 @@ class Gui():
 		self.update_silnik()
 		self.update_serwo()
 
-		self.top.protocol("WM_DELETE_WINDOW", self.quit_close)
+		#self.top.protocol("WM_DELETE_WINDOW", self.quit_close)
 		self.refresh() # odswieza wartosci gdy nic nie jest przesylane przez Bluetooth
 		self.top.mainloop()
 
@@ -108,6 +109,7 @@ class Gui():
 		self.watek_blutacza.start()
 
 	def zamknij(self):
+		print "OFF"
 		global SwitchOff
 		SwitchOff = False
 
@@ -119,11 +121,11 @@ class Gui():
 
 	def update_serwo(self):
 		global KOD_STERUJACY
-		self.label_skret.config(text="Skręt: " + KOD_STERUJACY[0:4])
+		self.label_skret.config(text="Skręt: " + KOD_STERUJACY[0:2])
 		
 	def update_silnik(self):
 		global KOD_STERUJACY
-		self.label_wiatrak.config(text="Moc: " + KOD_STERUJACY[4:9])
+		self.label_wiatrak.config(text="Moc: " + KOD_STERUJACY[4:5])
 
 	def update_WallWarning(self):
 		global WallWarning
@@ -137,31 +139,29 @@ class Gui():
 			klawisz = str(przycisk.keysym)
 
 		if klawisz=="Up":
-			if ( int(KOD_STERUJACY[4:9])+self.UpDownStep <= self.MaxUpDown ):
-				new_value = int(KOD_STERUJACY[4:9]) + self.UpDownStep
-				uzupelnij = 5 - len(str(new_value)) # uzupelnienie zerami zmiennej KOD_STERUJACY
-				KOD_STERUJACY = KOD_STERUJACY[:4] + uzupelnij * "0" + str(new_value) + KOD_STERUJACY[9:]
+			if ( int(KOD_STERUJACY[2:5])+self.UpDownStep <= self.MaxUpDown ):
+				new_value = int(KOD_STERUJACY[2:5]) + self.UpDownStep
+				uzupelnij = 3 - len(str(new_value)) # uzupelnienie zerami zmiennej KOD_STERUJACY
+				KOD_STERUJACY = KOD_STERUJACY[:2] + uzupelnij * "0" + str(new_value) + KOD_STERUJACY[5:]
 
 
 		elif klawisz=="Down":
-			if ( int(KOD_STERUJACY[4:9])-self.UpDownStep >= self.MinUpDown ):
-				new_value = int(KOD_STERUJACY[4:9]) - self.UpDownStep
-				uzupelnij = 5 - len(str(new_value))
-				KOD_STERUJACY = KOD_STERUJACY[:4] + uzupelnij * "0" + str(new_value) + KOD_STERUJACY[9:]
+			if ( int(KOD_STERUJACY[2:5])-self.UpDownStep >= self.MinUpDown ):
+				new_value = int(KOD_STERUJACY[2:5]) - self.UpDownStep
+				uzupelnij = 3 - len(str(new_value))
+				KOD_STERUJACY = KOD_STERUJACY[:2] + uzupelnij * "0" + str(new_value) + KOD_STERUJACY[5:]
 				
 
 		elif klawisz=="Right":
-			if ( int(KOD_STERUJACY[0:4])+self.LeftRightStep <= self.MaxLeftRight ):
-				new_value = int(KOD_STERUJACY[0:4]) + self.LeftRightStep
-				uzupelnij = 4 - len(str(new_value))
-				KOD_STERUJACY = uzupelnij * "0" + str(new_value) + KOD_STERUJACY[4:]
+			if ( int(KOD_STERUJACY[0:2])+self.LeftRightStep <= self.MaxLeftRight ):
+				new_value = int(KOD_STERUJACY[0:2]) + self.LeftRightStep
+				KOD_STERUJACY = str(new_value) + KOD_STERUJACY[2:]
 
 
 		elif klawisz=="Left":
-			if ( int(KOD_STERUJACY[0:4])-self.LeftRightStep >= self.MinLeftRight ):
-				new_value = int(KOD_STERUJACY[0:4]) - self.LeftRightStep
-				uzupelnij = 4 - len(str(new_value))
-				KOD_STERUJACY = uzupelnij * "0" + str(new_value) + KOD_STERUJACY[4:]
+			if ( int(KOD_STERUJACY[0:2])-self.LeftRightStep >= self.MinLeftRight ):
+				new_value = int(KOD_STERUJACY[0:2]) - self.LeftRightStep
+				KOD_STERUJACY = str(new_value) + KOD_STERUJACY[2:]
 
 		self.update_silnik()
 		self.update_serwo()
