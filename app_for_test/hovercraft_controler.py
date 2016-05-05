@@ -23,7 +23,14 @@ class NiebieskiZab():
 		self.PORT = 1
 
 		self.socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM) # utworzenie gniazda
-		self.socket.connect((self.ADRES_PODUSZKOWCA, self.PORT))
+		self.socket.connect((self.ADRES_PODUSZKOWCA, self.PORT)) 
+
+	def test(self):
+		global KOD_STERUJACY
+		while SwitchOff:
+			check = self.string2chars2string(KOD_STERUJACY)
+			print check
+			time.sleep(1)
 
 	def komunikacja(self):
 		global KOD_STERUJACY
@@ -33,16 +40,23 @@ class NiebieskiZab():
 
 		while SwitchOff:
 			ZAMEK.acquire()
-			message = KOD_STERUJACY
+			message_tmp = KOD_STERUJACY
 			ZAMEK.release()
+			message = self.string2chars2string(KOD_STERUJACY)
 			self.socket.send(message)
 			response = self.socket.recv(1024)
 			WallWarning = str(response)
 			time.sleep(0.5)
-		self.socket.send("6000000011") # po rozlaczeniu wylacza silnik tylny
+		self.socket.send(self.string2chars2string("6000000011")) # po rozlaczeniu wylacza silnik tylny
+
+	def string2chars2string(self, str_kod):
+		# zwraca stringa przekonwertowanego na znaki kodu ASCII
+		result = ( str(chr(int(str_kod[0:2]))) + str(chr(int(str_kod[2:5]))) + str(chr(int(str_kod[5:8]))) + 
+			str(chr(int(str_kod[8]))) + str(chr(int(str_kod[9]))) )
+		return result
 
 	def __del__(self):
-		self.socket.close()
+		self.socket.close() # zakomentowane dla testow
 
 class Gui():
 	def __init__(self):
@@ -125,7 +139,7 @@ class Gui():
 		
 	def update_silnik(self):
 		global KOD_STERUJACY
-		self.label_wiatrak.config(text="Moc: " + KOD_STERUJACY[4:5])
+		self.label_wiatrak.config(text="Moc: " + KOD_STERUJACY[2:5])
 
 	def update_WallWarning(self):
 		global WallWarning
@@ -167,9 +181,7 @@ class Gui():
 		self.update_serwo()
 
 
-
-
-# INICJALIZACJA
+# MAIN
 if __name__ == '__main__':
 	top = Gui()
 
