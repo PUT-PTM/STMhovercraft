@@ -44,10 +44,12 @@ class NiebieskiZab():
 			ZAMEK.release()
 			message = self.string2chars2string(KOD_STERUJACY)
 			self.socket.send(message)
-			response = self.socket.recv(1024)
+			response_tmp = self.socket.recv(1024)
+			response = ord(response_tmp) # konwersja znaku char na wartosc liczbowa ASCII
 			WallWarning = str(response)
 			time.sleep(0.5)
 		self.socket.send(self.string2chars2string("6500000011")) # po rozlaczeniu wylacza silnik tylny
+		self.socket.close()
 
 	def string2chars2string(self, str_kod):
 		# zwraca stringa przekonwertowanego na znaki kodu ASCII
@@ -109,7 +111,7 @@ class Gui():
 		self.update_silnik()
 		self.update_serwo()
 
-		#self.top.protocol("WM_DELETE_WINDOW", self.quit_close)
+		self.top.protocol("WM_DELETE_WINDOW", self.quit_close)
 		self.refresh() # odswieza wartosci gdy nic nie jest przesylane przez Bluetooth
 		self.top.mainloop()
 
