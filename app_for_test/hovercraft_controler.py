@@ -9,7 +9,7 @@ import sys
 
 # ZMIENNE GLOBALNE
 
-KOD_STERUJACY = "6000012011" # 60 000 120 1 1
+KOD_STERUJACY = "6500012011" # 60 000 120 1 1
 # serwo silnik_tyl silnik_dol kierunek_tyl kierunek_dol
 
 WallWarning = "0"
@@ -47,7 +47,7 @@ class NiebieskiZab():
 			response = self.socket.recv(1024)
 			WallWarning = str(response)
 			time.sleep(0.5)
-		self.socket.send(self.string2chars2string("6000000011")) # po rozlaczeniu wylacza silnik tylny
+		self.socket.send(self.string2chars2string("6500000011")) # po rozlaczeniu wylacza silnik tylny
 
 	def string2chars2string(self, str_kod):
 		# zwraca stringa przekonwertowanego na znaki kodu ASCII
@@ -64,12 +64,12 @@ class Gui():
 
 		# ZMIENNE
 
-		self.UpDownStep = 10
-		self.LeftRightStep = 5
+		self.UpDownStep = 5
+		self.LeftRightStep = 1
 		self.MinUpDown = 0
 		self.MaxUpDown = 120
-		self.MinLeftRight = 35
-		self.MaxLeftRight = 85
+		self.MinLeftRight = 45
+		self.MaxLeftRight = 95
 
 		# --------------------------------------------------------------------------------------------
 

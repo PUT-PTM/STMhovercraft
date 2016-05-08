@@ -302,12 +302,18 @@ int main(void) {
 		/* sprawdza czy licznik przekroczyl 10000 (okolo 10 sekund) i czy odlegosc odczytana z czujnika jest wieksza od 20cm */
 		if (licznik < 5000 && odl > 20) { // jesli spelnione to praca normalna
 			TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzajacego
+			Delay(50);
 			TIM4->CCR2 = dane_silnik2; // przypisanie wartosci PWM do silnika unoszacego
+			Delay(50);
 			TIM4->CCR3 = dane_serwo; // przypisanie wartosci PWM do serwa
+			Delay(50);
 		} else { // w przeciwnym wypadku wylacz silniki
 			TIM4->CCR1 = 0;
+			Delay(50);
 			TIM4->CCR2 = 0;
+			Delay(50);
 			TIM4->CCR3 = 1200;
+			Delay(50);
 			// hamowanie silnika 2
 			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_10);
@@ -316,8 +322,8 @@ int main(void) {
 			GPIO_ResetBits(GPIOE, GPIO_Pin_7);
 		}
 		if(licznik < 10000)
-		licznik += 100; // zwieksza licznik o ilosc milisekund opoznienia
+		licznik += 150; // zwieksza licznik o ilosc milisekund opoznienia
 		odl = (uint8_t)((UB_HCSR04_Distance_cm()+UB_HCSR04_Distance_cm())/2); //odczytywanie odleglosci z czujnika odleglosci HC-Sr04
-		Delay(100); // opoznienie 0.1s
+		//Delay(100); // opoznienie 0.1s
 	}
 }

@@ -32,7 +32,7 @@
 </editor>
 <editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" partName="main.c" path="E:/Maciej/Maciej/studia/STM32/Projekt_poduszkowiec/GIT/STMhovercraft/main.c" title="main.c" tooltip="E:/Maciej/Maciej/studia/STM32/Projekt_poduszkowiec/GIT/STMhovercraft/main.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/STMhovercraft/main.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="12606" selectionTopPixel="4860"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="13360" selectionTopPixel="5146"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="stm32_ub_hcsr04.c" partName="stm32_ub_hcsr04.c" path="E:/Maciej/Maciej/studia/STM32/czyjnik HC-SR04/biblioteka HCSR04/stm32_ub_hcsr04.c" title="stm32_ub_hcsr04.c" tooltip="E:/Maciej/Maciej/studia/STM32/czyjnik HC-SR04/biblioteka HCSR04/stm32_ub_hcsr04.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/STMhovercraft/cmsis_lib/source/stm32_ub_hcsr04.c"/>
@@ -411,20 +411,23 @@
 <actionBarAdvisor/>
 </window>
 <mruList>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" tooltip="STMhovercraft/main.c">
-<persistable path="/STMhovercraft/main.c"/>
-</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32_ub_hcsr04.c" tooltip="STMhovercraft/cmsis_lib/source/stm32_ub_hcsr04.c">
 <persistable path="/STMhovercraft/cmsis_lib/source/stm32_ub_hcsr04.c"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32_ub_hcsr04.h" tooltip="STMhovercraft/cmsis_lib/include/stm32_ub_hcsr04.h">
+<persistable path="/STMhovercraft/cmsis_lib/include/stm32_ub_hcsr04.h"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f4xx.h" tooltip="STMhovercraft/cmsis_boot/stm32f4xx.h">
 <persistable path="/STMhovercraft/cmsis_boot/stm32f4xx.h"/>
 </file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="system_stm32f4xx.h" tooltip="STMhovercraft/cmsis_boot/system_stm32f4xx.h">
+<persistable path="/STMhovercraft/cmsis_boot/system_stm32f4xx.h"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="system_stm32f4xx.c" tooltip="STMhovercraft/cmsis_boot/system_stm32f4xx.c">
 <persistable path="/STMhovercraft/cmsis_boot/system_stm32f4xx.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="system_stm32f4xx.h" tooltip="STMhovercraft/cmsis_boot/system_stm32f4xx.h">
-<persistable path="/STMhovercraft/cmsis_boot/system_stm32f4xx.h"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" tooltip="STMhovercraft/main.c">
+<persistable path="/STMhovercraft/main.c"/>
 </file>
 <file factoryID="org.coocox.component.ui.editors.repository.RepositoryElementFactory" id="org.coocox.builder.ui.editors.repository.RepositoryBrowser" name="Repository" tooltip="Repository">
 <persistable>&#x0A;<subPage/>
@@ -450,9 +453,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="system_stm32f4xx.c" tooltip="zaliczenie/cmsis_boot/system_stm32f4xx.c">
 <persistable path="/zaliczenie/cmsis_boot/system_stm32f4xx.c"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32_ub_hcsr04.c" tooltip="czyjnik_odleglosci/cmsis_lib/source/stm32_ub_hcsr04.c">
-<persistable path="/czyjnik_odleglosci/cmsis_lib/source/stm32_ub_hcsr04.c"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32_ub_hcsr04.h" tooltip="czyjnik_odleglosci/cmsis_lib/include/stm32_ub_hcsr04.h">
 <persistable path="/czyjnik_odleglosci/cmsis_lib/include/stm32_ub_hcsr04.h"/>
