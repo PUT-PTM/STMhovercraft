@@ -17,7 +17,7 @@
  *
  * 													Dane sterujace:
  * xyzab
- * x - skret serwa w wartosciach miedzy 35, a 85
+ * x - skret serwa w wartosciach miedzy 45, a 95
  * y - obroty silnika 1 w wartosciach miedzy 0, a 120
  * z - obroty silnika 2 w wartosciach miedzy 0, a 120
  * a - kierunek obrotow silnika 1 w wartosciach 0 lub 1
@@ -299,8 +299,9 @@ int main(void) {
 			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
 			GPIO_SetBits(GPIOE, GPIO_Pin_10);
 		}
-		/* sprawdza czy licznik przekroczyl 10000 (okolo 10 sekund) i czy odlegosc odczytana z czujnika jest wieksza od 20cm */
-		if (licznik < 5000 && odl > 20) { // jesli spelnione to praca normalna
+		/* sprawdza czy licznik przekroczyl 5000 (okolo 5 sekund) i czy odlegosc odczytana z czujnika jest wieksza od 50cm 
+		przypisywanie wartosci co 50ms w celu zredukowania spadkow napiec*/
+		if (licznik < 5000 && odl > 50) { // jesli spelnione to praca normalna
 			TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzajacego
 			Delay(50);
 			TIM4->CCR2 = dane_silnik2; // przypisanie wartosci PWM do silnika unoszacego
@@ -324,6 +325,5 @@ int main(void) {
 		if(licznik < 10000)
 		licznik += 150; // zwieksza licznik o ilosc milisekund opoznienia
 		odl = (uint8_t)((UB_HCSR04_Distance_cm()+UB_HCSR04_Distance_cm())/2); //odczytywanie odleglosci z czujnika odleglosci HC-Sr04
-		//Delay(100); // opoznienie 0.1s
 	}
 }
