@@ -3,7 +3,6 @@ import Tkinter
 import bluetooth
 #import tkMessageBox
 import threading
-import Queue
 import time
 import sys
 
