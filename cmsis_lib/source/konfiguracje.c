@@ -7,7 +7,6 @@
 #include "stm32f4xx_exti.h"
 #include "konfiguracje.h"
 
-
 /*******************************************************************************************************
  Funckja inicjalizujaca linie sterujace
  *******************************************************************************************************/
@@ -75,8 +74,11 @@ void Config_Rx() {
 	// konfiguracja linii Rx
 	GPIO_PinAFConfig(GPIOC, GPIO_PinSource11, GPIO_AF_USART3);
 	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
 }
 
@@ -140,8 +142,8 @@ void PWM() {
 void Timer5() {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE);
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	TIM_TimeBaseStructure.TIM_Period = 200;
-	TIM_TimeBaseStructure.TIM_Prescaler = 8399;
+	TIM_TimeBaseStructure.TIM_Period = 100;
+	TIM_TimeBaseStructure.TIM_Prescaler = 41999;
 	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);
@@ -161,10 +163,9 @@ void Timer4() {
 void Timer3() {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	TIM_TimeBaseStructure.TIM_Period = 5000;
-	TIM_TimeBaseStructure.TIM_Prescaler = 8399;
+	TIM_TimeBaseStructure.TIM_Period = 10000;
+	TIM_TimeBaseStructure.TIM_Prescaler = 41999;
 	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
-	TIM_Cmd(TIM3, ENABLE);
 }

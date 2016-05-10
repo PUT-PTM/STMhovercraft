@@ -42,7 +42,8 @@ volatile uint8_t kierunek_silnik1 = 1; // silnik napedzajacy, kierunek w przod
 volatile uint8_t kierunek_silnik2 = 1; // silnik unoszacy, kierunek unoszacy
 volatile uint8_t odl = 0; // zmienna przechowujaca odleglosc w cm, od przeszkody z czujnika HC-Sr04
 volatile uint16_t licznik_danych = 0; // licznik odebranych wlasciwie danych
-const int16_t dlugosc = 6; // dlugosc odbieranych danych
+volatile const int16_t dlugosc = 6; // dlugosc odbieranych danych
+volatile int16_t haha = 0;
 
 /*******************************************************************************************************
  Funkcje inicjalizujace zegar SysTtick
@@ -62,11 +63,10 @@ void SysTick_Handler(void) {
 }
 
 /************************************************************************************************
- Funkcja czytajaca 5-znakowe lancuchy sterujace
+ Funkcja czytajaca 6-znakowe lancuchy sterujace
  *************************************************************************************************/
 void read_string() {
 	uint8_t d[dlugosc]; // roboczy lancuch znakow
-	licznik_danych = 0; // licznik odebranych wlasciwie danych
 	TIM_Cmd(TIM5, ENABLE);
 	TIM_ClearFlag(TIM5, TIM_FLAG_Update);
 	for (licznik_danych = 0; licznik_danych < dlugosc;) {
@@ -76,7 +76,7 @@ void read_string() {
 			TIM5->CNT = 0;
 		}
 		// jesli przekroczono dopuszczalny prog bledu to wyjdz z petli i anuluj dane
-		if (TIM_GetFlagStatus(TIM5, TIM_FLAG_Update)==SET) {
+		if (TIM_GetFlagStatus(TIM5, TIM_FLAG_Update)) {
 			licznik_danych = 0;
 			break;
 		}
@@ -90,6 +90,7 @@ void read_string() {
 		kierunek_silnik1 = d[3];
 		kierunek_silnik2 = d[4];
 	}
+	TIM_Cmd(TIM5, DISABLE);
 }
 
 /************************************************************************************************
@@ -107,9 +108,9 @@ void send_char(uint16_t c) {
 void USART3_IRQHandler(void) {
 	if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET) {
 		read_string(); // odczytanie lancucha sterujacego
-		TIM3->CNT=0;
 		TIM_ClearFlag(TIM3, TIM_FLAG_Update);
-		if (licznik_danych == 5)
+		TIM3->CNT=0;
+		if (licznik_danych == 6)
 			send_char(odl); // wyslanie odleglosci odczytanej z HC-Sr04 do kontrolera
 		while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET) {
 		}
@@ -122,18 +123,19 @@ void USART3_IRQHandler(void) {
 int main(void) {
 	SystemInit();
 	Zegar(); // inicjalizacja zegarow
+	GPIO(); // inicjalizacja portow GPIO
 	Config_Tx(); // konfiguracja linii TX
 	Config_Rx(); // konfiguracja linii RX
 	Config_USART(); //konfiguracja USART
 	Config_NVIC(); // konfiguracja przerwan USART
 	USART_Cmd(USART3, ENABLE); // uruchomienie USART
-	NVIC_EnableIRQ(USART3_IRQn); // wlaczenie przerwan dla USART
-	GPIO(); // inicjalizacja portow GPIO
 	Timer4(); // konfiguracja zegara TIM4
 	PWM(); // inicjalizacja i konfiguracja PWM
 	UB_HCSR04_Init(); // inicjalizacja czujnika odlegosci HC-Sr04
+	NVIC_EnableIRQ(USART3_IRQn); // wlaczenie przerwan dla USART
 	Timer3();
 	Timer5();
+	TIM_Cmd(TIM3, ENABLE);
 
 	/* ustawienie zegara SySTick tak by odmierzal 1ms */
 	if (SysTick_Config(SystemCoreClock / 1000)) {
@@ -165,18 +167,18 @@ int main(void) {
 		przypisywanie wartosci co 50ms w celu zredukowania spadkow napiec*/
 		if (TIM_GetFlagStatus(TIM3, TIM_FLAG_Update)==RESET && odl > 50) { // jesli spelnione to praca normalna
 			TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzajacego
-			Delay(50);
+			Delay(5);
 			TIM4->CCR2 = dane_silnik2; // przypisanie wartosci PWM do silnika unoszacego
-			Delay(50);
+			Delay(5);
 			TIM4->CCR3 = dane_serwo; // przypisanie wartosci PWM do serwa
-			Delay(50);
+			Delay(5);
 		} else { // w przeciwnym wypadku wylacz silniki
 			TIM4->CCR1 = 0;
-			Delay(50);
+			Delay(5);
 			TIM4->CCR2 = 0;
-			Delay(50);
+			Delay(5);
 			TIM4->CCR3 = 1200;
-			Delay(50);
+			Delay(5);
 			// hamowanie silnika 2
 			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_10);
