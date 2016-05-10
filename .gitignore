@@ -8,3 +8,6 @@ STMhovercraft/Debug/obj/history.xml
 STMhovercraft/Debug/obj/main.o
 *.o
 STMhovercraft/STMhovercraft.elf.xcodeproj/project.pbxproj
+logs/codb.2016-05-10.log
+logs/codb-time-client-2016-05-10.log
+logs/codb-stat-client.2016-05-10.log

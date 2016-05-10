@@ -137,6 +137,16 @@ void PWM() {
 /***************************************************************************************************
  Funckja inicjalizujaca zegar TIM4 dla PWM
  ***************************************************************************************************/
+void Timer5() {
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE);
+	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+	TIM_TimeBaseStructure.TIM_Period = 200;
+	TIM_TimeBaseStructure.TIM_Prescaler = 8399;
+	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);
+}
+
 void Timer4() {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
@@ -146,4 +156,15 @@ void Timer4() {
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure);
 	TIM_Cmd(TIM4, ENABLE);
+}
+
+void Timer3() {
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+	TIM_TimeBaseStructure.TIM_Period = 5000;
+	TIM_TimeBaseStructure.TIM_Prescaler = 8399;
+	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
+	TIM_Cmd(TIM3, ENABLE);
 }

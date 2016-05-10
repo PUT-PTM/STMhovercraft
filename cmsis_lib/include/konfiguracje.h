@@ -5,4 +5,6 @@ void Config_Tx();
 void Config_Rx();
 void Config_NVIC();
 void PWM();
+void Timer5();
 void Timer4();
+void Timer3();
