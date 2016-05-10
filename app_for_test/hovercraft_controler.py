@@ -53,8 +53,9 @@ class NiebieskiZab():
 
 	def string2chars2string(self, str_kod):
 		# zwraca stringa przekonwertowanego na znaki kodu ASCII
+		# tylda jest charakterystycznych znakiem konca kodu sterujacego
 		result = ( str(chr(int(str_kod[0:2]))) + str(chr(int(str_kod[2:5]))) + str(chr(int(str_kod[5:8]))) + 
-			str(chr(int(str_kod[8]))) + str(chr(int(str_kod[9]))) )
+			str(chr(int(str_kod[8]))) + str(chr(int(str_kod[9]))) + "~")
 		return result
 
 	def __del__(self):
@@ -116,6 +117,8 @@ class Gui():
 		self.top.mainloop()
 
 	def quit_close(self):
+		global SwitchOff
+		SwitchOff = False
 		sys.exit(0)
 
 	def uruchom(self):
