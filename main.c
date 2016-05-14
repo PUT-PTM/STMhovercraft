@@ -165,7 +165,7 @@ int main(void) {
 		}
 		/* sprawdza czy licznik przekroczyl 5000 (okolo 5 sekund) i czy odlegosc odczytana z czujnika jest wieksza od 50cm 
 		przypisywanie wartosci co 50ms w celu zredukowania spadkow napiec*/
-		if (TIM_GetFlagStatus(TIM3, TIM_FLAG_Update)==RESET && odl > 50) { // jesli spelnione to praca normalna
+		if (TIM_GetFlagStatus(TIM3, TIM_FLAG_Update)==RESET && odl > 30) { // jesli spelnione to praca normalna
 			TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzajacego
 			Delay(5);
 			TIM4->CCR2 = dane_silnik2; // przypisanie wartosci PWM do silnika unoszacego

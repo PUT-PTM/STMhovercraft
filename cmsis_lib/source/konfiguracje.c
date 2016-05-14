@@ -142,7 +142,7 @@ void PWM() {
 void Timer5() {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE);
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	TIM_TimeBaseStructure.TIM_Period = 100;
+	TIM_TimeBaseStructure.TIM_Period = 200;
 	TIM_TimeBaseStructure.TIM_Prescaler = 41999;
 	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
