@@ -1,5 +1,6 @@
 /******************************************************************************************************
  *														 PINY:
+ *Sterowanie:
  * B8 - serwo PWM
  * B7 - silnik 2 PWM (unoszacy)
  * B6 - silnik 1 PWM (naped)
@@ -14,6 +15,9 @@
  *Czujnik HC-Sr04:
  * PD3 - wyzwalacz czujnika HC-Sr04
  * PA0 - echo czujnika HC-Sr04
+ *
+ * ADC:
+ * PA1 - odczyt z ADC
  *
  * 													Dane sterujace:
  * xyzab
@@ -32,6 +36,8 @@
 #include "stm32f4xx_syscfg.h"
 #include "stm32f4xx_exti.h"
 #include "stm32_ub_hcsr04.h"
+#include "stm32f4xx_dma.h"
+#include "stm32f4xx_adc.h"
 #include "konfiguracje.h"
 
 static __IO uint32_t TimingDelay; // zmienna pomocna do zegara SysTick
@@ -43,7 +49,7 @@ volatile uint8_t kierunek_silnik2 = 1; // silnik unoszacy, kierunek unoszacy
 volatile uint8_t odl = 0; // zmienna przechowujaca odleglosc w cm, od przeszkody z czujnika HC-Sr04
 volatile uint16_t licznik_danych = 0; // licznik odebranych wlasciwie danych
 volatile const int16_t dlugosc = 6; // dlugosc odbieranych danych
-volatile int16_t haha = 0;
+volatile uint16_t wartosc_ADC = 0; // wartosc z przetwornika ADC zapisana przez DMA
 
 /*******************************************************************************************************
  Funkcje inicjalizujace zegar SysTtick
@@ -82,7 +88,7 @@ void read_string() {
 		}
 	}
 	// przypisuje tylko dane odebrane we wlasciwy sposob
-	if (licznik_danych == dlugosc && d[5]=='~') {
+	if (licznik_danych == dlugosc && d[5] == '~') {
 		/* konwertowanie lancuchow znakowych do poszczegolnych zmiennych sterujacy */
 		dane_serwo = (uint16_t)(d[0] * 20);
 		dane_silnik1 = (uint16_t)(d[1] * 500);
@@ -109,7 +115,7 @@ void USART3_IRQHandler(void) {
 	if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET) {
 		read_string(); // odczytanie lancucha sterujacego
 		TIM_ClearFlag(TIM3, TIM_FLAG_Update);
-		TIM3->CNT=0;
+		TIM3->CNT = 0;
 		if (licznik_danych == 6)
 			send_char(odl); // wyslanie odleglosci odczytanej z HC-Sr04 do kontrolera
 		while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET) {
@@ -122,6 +128,10 @@ void USART3_IRQHandler(void) {
  *******************************************************************************************/
 int main(void) {
 	SystemInit();
+	SystemCoreClockUpdate();
+	Config_DMA_P2M(); // konfiguracja DMA by zapisywalo dane z ADC
+	Config_ADC(); // konfiguracja ADC
+	ADC_SoftwareStartConv(ADC1);
 	Zegar(); // inicjalizacja zegarow
 	GPIO(); // inicjalizacja portow GPIO
 	Config_Tx(); // konfiguracja linii TX
@@ -133,9 +143,9 @@ int main(void) {
 	PWM(); // inicjalizacja i konfiguracja PWM
 	UB_HCSR04_Init(); // inicjalizacja czujnika odlegosci HC-Sr04
 	NVIC_EnableIRQ(USART3_IRQn); // wlaczenie przerwan dla USART
-	Timer3();
-	Timer5();
-	TIM_Cmd(TIM3, ENABLE);
+	Timer3(); // timer odpowiedzialny za sprawdzanie, czy nie zostalo zerwane polaczenie
+	Timer5(); // timer odpowiedzialny za zapewnianie wyjscia z przewania USART, gdyby otrzymano niepelne dane
+	TIM_Cmd(TIM3, ENABLE); // uruchomienie timera 3
 
 	/* ustawienie zegara SySTick tak by odmierzal 1ms */
 	if (SysTick_Config(SystemCoreClock / 1000)) {
@@ -163,22 +173,17 @@ int main(void) {
 			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
 			GPIO_SetBits(GPIOE, GPIO_Pin_10);
 		}
-		/* sprawdza czy licznik przekroczyl 5000 (okolo 5 sekund) i czy odlegosc odczytana z czujnika jest wieksza od 50cm 
-		przypisywanie wartosci co 50ms w celu zredukowania spadkow napiec*/
-		if (TIM_GetFlagStatus(TIM3, TIM_FLAG_Update)==RESET && odl > 30) { // jesli spelnione to praca normalna
+		/* sprawdza czy flaga TIM5 jest ustawiona (po 5s),
+		 * czy odlegosc odczytana z czujnika jest wieksza od 20cm
+		 * i czy napiecie zasilania nie spadlo ponizej 9V*/
+		if (TIM_GetFlagStatus(TIM3, TIM_FLAG_Update) == RESET && odl > 20
+				&& wartosc_ADC > 3000) { // jesli spelnione to praca normalna
 			TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzajacego
-			Delay(5);
 			TIM4->CCR2 = dane_silnik2; // przypisanie wartosci PWM do silnika unoszacego
-			Delay(5);
-			TIM4->CCR3 = dane_serwo; // przypisanie wartosci PWM do serwa
-			Delay(5);
+
 		} else { // w przeciwnym wypadku wylacz silniki
 			TIM4->CCR1 = 0;
-			Delay(5);
 			TIM4->CCR2 = 0;
-			Delay(5);
-			TIM4->CCR3 = 1200;
-			Delay(5);
 			// hamowanie silnika 2
 			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_10);
@@ -186,6 +191,8 @@ int main(void) {
 			GPIO_ResetBits(GPIOE, GPIO_Pin_9);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_7);
 		}
+		TIM4->CCR3 = dane_serwo; // przypisanie wartosci PWM do serwa
 		odl = (uint8_t)(UB_HCSR04_Distance_cm()); //odczytywanie odleglosci z czujnika odleglosci HC-Sr04
+		Delay(100); // opoznienie 100ms
 	}
 }

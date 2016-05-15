@@ -8,3 +8,5 @@ void PWM();
 void Timer5();
 void Timer4();
 void Timer3();
+void Config_DMA_P2M(void);
+void Config_ADC(void);
