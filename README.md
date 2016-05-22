@@ -10,7 +10,7 @@ Remote-controlled hovercraft with two engines. Powered by a large battery.
 - servomechanism TowerPro MG-91
 - two engines with propellers
 - battery 9.6V
-- controller L298 with radiat
+- controller L298 with radiator
 
 Additionally: PC application written in Python 2.7.
 
