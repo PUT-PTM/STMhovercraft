@@ -30,7 +30,7 @@ Additionally: PC application written in Python 2.7.
 - PA0 - echo sensor HC-Sr04
 
 #### ADC:
-- PA1 - read from ADC
+- PA1 - read from ADC<br />
 For the safety of the battery, the voltage is measuring and power is cut off when battery is low.
 
 #### Control data:
