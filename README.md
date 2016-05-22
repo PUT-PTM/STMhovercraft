@@ -19,7 +19,7 @@ Remote-controlled hovercraft with two engines. Powered by a large battery.
 - E7 i E9 - engine 1 control pins
 - E10 i E12 - engine 2 control pins
 
-#### Bluetooth HC=05:
+#### Bluetooth HC-05:
 - C10 - line TX
 - C11 - line RX
 
