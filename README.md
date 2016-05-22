@@ -35,7 +35,7 @@ For the safety of the battery, the voltage is measured and power is cut off when
 
 #### Control data:
 - xyzab~
-- x - servos turns in the values between 0 and 85
+- x - servo turn in the values between 0 and 85
 - y - engine 1 speed in the values between 0 and 120
 - z - engine 2 speed in the values between 0 and 120
 - a - rotate direction of engine 1 in the values of 0 or 1
