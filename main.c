@@ -20,12 +20,13 @@
  * PA1 - odczyt z ADC
  *
  * 													Dane sterujace:
- * xyzab
+ * xyzab~
  * x - skret serwa w wartosciach miedzy 45, a 95
  * y - obroty silnika 1 w wartosciach miedzy 0, a 120
  * z - obroty silnika 2 w wartosciach miedzy 0, a 120
  * a - kierunek obrotow silnika 1 w wartosciach 0 lub 1
  * b - kierunek obrotow silnika 2 w wartosciach 0 lub 1
+ * ~ - znak konca komendy
  ******************************************************************************************************/
 
 #include "stm32f4xx_gpio.h"
@@ -173,14 +174,15 @@ int main(void) {
 			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
 			GPIO_SetBits(GPIOE, GPIO_Pin_10);
 		}
-		/* sprawdza czy flaga TIM5 jest ustawiona (po 5s),
+		/* sprawdza czy flaga TIM3 jest ustawiona (po 5s),
 		 * czy odlegosc odczytana z czujnika jest wieksza od 20cm
 		 * i czy napiecie zasilania nie spadlo ponizej 9V*/
-		if (TIM_GetFlagStatus(TIM3, TIM_FLAG_Update) == RESET && odl > 20
-				&& wartosc_ADC > 3000) { // jesli spelnione to praca normalna
+
+		if (TIM_GetFlagStatus(TIM3, TIM_FLAG_Update) == RESET
+				&& (odl > 20 || odl <= 2) && wartosc_ADC > 3000) { // jesli spelnione to praca normalna
 			TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzajacego
 			TIM4->CCR2 = dane_silnik2; // przypisanie wartosci PWM do silnika unoszacego
-
+			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14); // reset diod sygnalizujacych bledy
 		} else { // w przeciwnym wypadku wylacz silniki
 			TIM4->CCR1 = 0;
 			TIM4->CCR2 = 0;
@@ -190,9 +192,16 @@ int main(void) {
 			// hamowanie silnika 1
 			GPIO_ResetBits(GPIOE, GPIO_Pin_9);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_7);
+			// sygnalizacja bledow diodami
+			if (wartosc_ADC <= 3000)
+				GPIO_SetBits(GPIOD, GPIO_Pin_14);
+			if (TIM_GetFlagStatus(TIM3, TIM_FLAG_Update) == SET)
+				GPIO_SetBits(GPIOD, GPIO_Pin_13);
+			if (odl <= 20)
+				GPIO_SetBits(GPIOD, GPIO_Pin_12);
 		}
 		TIM4->CCR3 = dane_serwo; // przypisanie wartosci PWM do serwa
-		odl = (uint8_t)(UB_HCSR04_Distance_cm()); //odczytywanie odleglosci z czujnika odleglosci HC-Sr04
-		Delay(100); // opoznienie 100ms
+		odl = (uint8_t)(
+				(UB_HCSR04_Distance_cm() + UB_HCSR04_Distance_cm()) / 2); //odczytywanie odleglosci z czujnika odleglosci HC-Sr04
 	}
 }
