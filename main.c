@@ -1,16 +1,16 @@
 /******************************************************************************************************
  *														 PINY:
  *Sterowanie:
- * B8 - serwo PWM
- * B7 - silnik 2 PWM (unoszacy)
- * B6 - silnik 1 PWM (naped)
+ * PB8 - serwo PWM
+ * PB7 - silnik 2 PWM (unoszacy)
+ * PB6 - silnik 1 PWM (naped)
  *
- * E7 i E9 - piny sterujace silnikiem 1
- * E10 i E12 - piny sterujace silnikiem 2
+ * PE7 i E9 - piny sterujace silnikiem 1
+ * PE10 i E12 - piny sterujace silnikiem 2
  *
  *Bluetooth HC-05:
- * C10 - linia TX
- * C11 - linia RX
+ * PC10 - linia TX
+ * PC11 - linia RX
  *
  *Czujnik HC-Sr04:
  * PD3 - wyzwalacz czujnika HC-Sr04
