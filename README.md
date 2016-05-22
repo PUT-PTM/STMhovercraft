@@ -39,7 +39,7 @@ Additionally: PC application written in Python 2.7.
 
 ## Tools:
 
-
+CoCOX CoIDE
 
 ## How to run:
 
@@ -47,7 +47,7 @@ Additionally: PC application written in Python 2.7.
 
 ## How to compile:
 
-
+Download the project and compile it with CooCox CoIDE.
 
 ## Future improvements:
 
@@ -63,4 +63,4 @@ Maciej Marciniak<br />
 Krzysztof Łuczak
 
 The project was conducted during the Microprocessor Lab course held by the Institute of Control and Information Engineering, Poznan University of Technology.<br />
-Supervisor: Michał Fularz
+Supervisor: Tomasz Mańkowski
