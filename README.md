@@ -1,35 +1,64 @@
 # Hovercraft
-Projekt budowy i zaprogramowania poduszkowca zdalnie sterowanego.
+Remote-controlled hovercraft with two engines. Powered by a large battery.
 
-## Potrzebne materiały
-- mikrokontroler STM32f4
-- moduł Bluetooth HC-05 do komunikacji z pilotem (lub aplikacją komputerową)
-- czujnik odległości HC-SR04
-- korpus poduszkowca
-- serwomachanizm S90
-- dwa silniki ze śmigłami
-- bateria 9.6V
-- sterownik L298 z radiatorem
 
-### Opis PIN'ów
+## Description
+- microcontroller STM32f4
+- Bluetooth module HC-05 for communication with remote controller (or PC)
+- distance sensor HC-SR04
+- body hovercraft
+- servomechanism S90
+- two engines with propellers
+- battery 9.6V
+- controller L298 with radiat
+
+### PINs scheme
 - B8 - serwo PWM 
-- B7 - silnik 2 PWM (unoszący)
-- B6 - silnik 1 PWM (napęd)
-- E7 i E9 - piny sterujące silnikiem 1
-- E10 i E12 - piny sterujące silnikiem 2
+- B7 - engine 2 PWM (top-down)
+- B6 - engine 1 PWM (forward)
+- E7 i E9 - engine 1 control pins
+- E10 i E12 - engine 2 control pins
 
 ### Bluetooth HC=05:
-- C10 - linia TX
-- C11 - linia RX
+- C10 - line TX
+- C11 - line RX
 
-### Czujnik HC-Sr04:
-- PD3 - wyzwalacz czujnika HC-Sr04
-- PA0 - echo czujnika HC-Sr04
+### Sensor HC-Sr04:
+- PD3 - trigger sensor HC-Sr04
+- PA0 - echo sensor HC-Sr04
 
-### Dane sterujące:
+### Control data:
 - xyzab
-- x - skręt serwa w wartościach między 0, a 85
-- y - obroty silnika 1 w wartościach między 0, a 120
-- z - obroty silnika 2 w wartościach między 0, a 120
-- a - kierunek obrotów silnika 1 w wartościach 0 lub 1
-- b - kierunek obrotów silnika 2 w wartościach 0 lub 1
+- x - servos turn in the values between 0 and 85
+- y - engine 1 speed in the values between 0 and 120
+- z - engine 1 speed in the values between 0 and 120
+- a - rotate direction of engine 1 in the values of 0 or 1
+- b - rotate direction of engine 2 in the values of 0 or 1
+
+## Tools:
+
+
+
+## How to run:
+
+
+
+## How to compile:
+
+
+
+## Future improvements:
+
+
+
+## License:
+
+MIT
+
+## Credits:
+
+Maciej Marciniak
+Krzysztof Łuczak
+
+The project was conducted during the Microprocessor Lab course held by the Institute of Control and Information Engineering, Poznan University of Technology.
+Supervisor: Michał Fularz
