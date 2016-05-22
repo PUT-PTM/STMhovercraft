@@ -31,6 +31,7 @@ Additionally: PC application written in Python 2.7.
 
 #### ADC:
 - PA1 - read from ADC
+For the safety of the battery, the voltage is measuring and power is cut off when battery is low.
 
 #### Control data:
 - xyzab~
@@ -56,7 +57,7 @@ Download the project and compile it with CooCox CoIDE.
 ## Future improvements:
 
 - Bottom engine is a bit weak, so hovercraft floats quite low.
-- When battery is low, there are voltage drops.
+- Sometimes there are voltage drops.
 - Not tested on water.
 
 ## License:
