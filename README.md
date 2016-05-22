@@ -12,6 +12,8 @@ Remote-controlled hovercraft with two engines. Powered by a large battery.
 - battery 9.6V
 - controller L298 with radiat
 
+Additionally: PC application written in Python 2.7.
+
 #### PINs scheme
 - B8 - serwo PWM 
 - B7 - engine 2 PWM (top-down)
