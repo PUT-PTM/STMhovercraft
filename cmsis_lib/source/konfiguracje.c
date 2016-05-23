@@ -100,11 +100,12 @@ void Config_Rx() {
  Funkcja konfigurujaca przerwania dla USART
  **********************************************************************************************************/
 void Config_NVIC() {
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_3);
 	NVIC_InitTypeDef NVIC_InitStructure;
 	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
 	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }

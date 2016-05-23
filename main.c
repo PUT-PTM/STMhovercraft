@@ -45,8 +45,8 @@ static __IO uint32_t TimingDelay; // zmienna pomocna do zegara SysTick
 volatile uint16_t dane_serwo = 1200; // wartosc srodkowa serwa
 volatile uint16_t dane_silnik1 = 0; // silnik napedzajacy, wylaczony, maks 60000, min 0
 volatile uint16_t dane_silnik2 = 0; // silnik unoszacy, wylaczony, wlaczony 60000
-volatile uint8_t kierunek_silnik1 = 1; // silnik napedzajacy, kierunek w przod
-volatile uint8_t kierunek_silnik2 = 1; // silnik unoszacy, kierunek unoszacy
+volatile uint8_t kierunek_silnik1 = 0; // silnik napedzajacy, kierunek w przod
+volatile uint8_t kierunek_silnik2 = 0; // silnik unoszacy, kierunek unoszacy
 volatile uint8_t odl = 10; // zmienna przechowujaca odleglosc w cm, od przeszkody z czujnika HC-Sr04
 volatile uint8_t odl1 = 10; // zmienna pomocnicza do mierzenia odlegosci
 volatile uint16_t licznik_danych = 0; // licznik odebranych wlasciwie danych
@@ -158,20 +158,20 @@ int main(void) {
 	/* glowna petla programu */
 	while (1) {
 		/* umozliwia zmiane kierunku oborotow silnika napedzajacego */
-		if (kierunek_silnik1 != 0) { // jesli nie zero to kierunek w przod
+		if (kierunek_silnik1 != 33) { // jesli nie zero to kierunek w przod
 			GPIO_SetBits(GPIOE, GPIO_Pin_7);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_9);
 		}
-		if (kierunek_silnik1 == 0) { // jesli zero to kierunek w tyl
+		if (kierunek_silnik1 == 33) { // jesli zero to kierunek w tyl
 			GPIO_ResetBits(GPIOE, GPIO_Pin_7);
 			GPIO_SetBits(GPIOE, GPIO_Pin_9);
 		}
 		/* umozliwia zmiana kierunku oborotow silnika unoszacego */
-		if (kierunek_silnik2 != 0) { // jesli nie zero to kierunek unoszacy
+		if (kierunek_silnik2 != 33) { // jesli nie zero to kierunek unoszacy
 			GPIO_SetBits(GPIOE, GPIO_Pin_12);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_10);
 		}
-		if (kierunek_silnik2 == 0) { // jesli zero to kierunek zasycaj¹cy
+		if (kierunek_silnik2 == 33) { // jesli zero to kierunek zasycajacy
 			GPIO_ResetBits(GPIOE, GPIO_Pin_12);
 			GPIO_SetBits(GPIOE, GPIO_Pin_10);
 		}
@@ -179,8 +179,8 @@ int main(void) {
 		 * czy odlegosc odczytana z czujnika jest wieksza od 20cm
 		 * i czy napiecie zasilania nie spadlo ponizej 9V*/
 
-		if (TIM_GetFlagStatus(TIM3, TIM_FLAG_Update) == RESET
-				&& odl > 20 && wartosc_ADC > 3000) { // jesli spelnione to praca normalna
+		if (TIM_GetFlagStatus(TIM3, TIM_FLAG_Update) == RESET && odl > 20
+				&& wartosc_ADC > 3000) { // jesli spelnione to praca normalna
 			TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzajacego
 			TIM4->CCR2 = dane_silnik2; // przypisanie wartosci PWM do silnika unoszacego
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14); // reset diod sygnalizujacych bledy
@@ -203,7 +203,6 @@ int main(void) {
 		}
 		TIM4->CCR3 = dane_serwo; // przypisanie wartosci PWM do serwa
 		odl1 = UB_HCSR04_Distance_cm(); //odczytywanie odleglosci z czujnika odleglosci HC-Sr04
-		Delay(10);
 		if (odl1 > 0) // eliminacja zaklucen powodowanych spadkami napiec
 			odl = (uint8_t) odl1;
 	}
