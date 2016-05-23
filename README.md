@@ -31,11 +31,11 @@ Additionally: PC application written in Python 2.7.
 
 #### ADC:
 - PA1 - read from ADC<br />
-For the safety of the battery, the voltage is measuring and power is cut off when battery is low.
+For the safety of the battery, the voltage is measured and power is cut off when battery is low.
 
 #### Control data:
 - xyzab~
-- x - servos turn in the values between 40 and 80
+- x - servo turn in the values between 40 and 80
 - y - engine 1 speed in the values between 0 and 120
 - z - engine 2 speed in the values between 0 and 120
 - a - rotate direction of engine 1 in the values of 0 or 1
