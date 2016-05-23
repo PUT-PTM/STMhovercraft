@@ -205,5 +205,6 @@ int main(void) {
 		odl1 = UB_HCSR04_Distance_cm(); //odczytywanie odleglosci z czujnika odleglosci HC-Sr04
 		if (odl1 > 0) // eliminacja zaklucen powodowanych spadkami napiec
 			odl = (uint8_t) odl1;
+		Delay(100);
 	}
 }
