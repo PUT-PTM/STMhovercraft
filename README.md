@@ -19,15 +19,15 @@ Remote-controlled hovercraft with two engines. Powered by a large battery.
 Additionally: PC application written in Python 2.7.
 
 #### PINs scheme
-- PB8 - servo PWM 
-- PB7 - engine 2 PWM (top-down)
-- PB6 - engine 1 PWM (forward)
-- PE7 i PE9 - engine 1 control pins
-- PE10 i PE12 - engine 2 control pins
+- B8 - servo PWM 
+- B7 - engine 2 PWM (top-down)
+- B6 - engine 1 PWM (forward)
+- E7 i E9 - engine 1 control pins
+- E10 i E12 - engine 2 control pins
 
 #### Bluetooth HC-05:
-- PC10 - line TX
-- PC11 - line RX
+- C10 - line TX
+- C11 - line RX
 
 #### Sensor HC-Sr04:
 - PD3 - trigger sensor HC-Sr04
@@ -35,7 +35,7 @@ Additionally: PC application written in Python 2.7.
 
 #### ADC:
 - PA1 - read from ADC<br />
-For the safety of the battery, the voltage is measured and power is cut off when battery is low.
+For the safety of the battery, the voltage is measuring and power is cut off when battery is low.
 
 #### Control data:
 - xyzab~
