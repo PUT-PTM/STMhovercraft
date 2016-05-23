@@ -8,7 +8,7 @@ import sys
 
 # ZMIENNE GLOBALNE
 
-KOD_STERUJACY = "6500012011" # 60 000 120 1 1
+KOD_STERUJACY = "6000012011" # 60 000 120 1 1
 # serwo silnik_tyl silnik_dol kierunek_tyl kierunek_dol
 
 WallWarning = "0"
@@ -23,13 +23,6 @@ class NiebieskiZab():
 
 		self.socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM) # ZAKOMENTOWAC DO TESTOW
 		self.socket.connect((self.ADRES_PODUSZKOWCA, self.PORT)) # ZAKOMENTOWAC DO TESTOW
-
-	def test(self):
-		global KOD_STERUJACY
-		while SwitchOff:
-			check = self.string2chars2string(KOD_STERUJACY)
-			print("Wysylam: %s" % check)
-			time.sleep(1)
 
 	def komunikacja(self):
 		global KOD_STERUJACY
@@ -47,7 +40,7 @@ class NiebieskiZab():
 			response = ord(response_tmp) # konwersja znaku char na wartosc liczbowa ASCII
 			WallWarning = str(response)
 			time.sleep(0.5)
-		self.socket.send(self.string2chars2string("6500000011")+"~") # po rozlaczeniu wylacza silnik tylny
+		self.socket.send(self.string2chars2string("6000000011")+"~") # po rozlaczeniu wylacza silnik tylny
 		self.socket.close()
 
 	def string2chars2string(self, str_kod):
@@ -70,8 +63,8 @@ class Gui():
 		self.LeftRightStep = 1
 		self.MinUpDown = 0
 		self.MaxUpDown = 120
-		self.MinLeftRight = 45
-		self.MaxLeftRight = 95
+		self.MinLeftRight = 40
+		self.MaxLeftRight = 80
 
 		# --------------------------------------------------------------------------------------------
 
@@ -124,7 +117,7 @@ class Gui():
 		global SwitchOff
 		SwitchOff = True
 		self.blutacz = NiebieskiZab()
-		self.watek_blutacza = threading.Thread(target=self.blutacz.komunikacja) # ZMIENIC NA self.blutacz.test
+		self.watek_blutacza = threading.Thread(target=self.blutacz.komunikacja)
 		self.watek_blutacza.start()
 
 	def zamknij(self):
