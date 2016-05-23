@@ -21,7 +21,7 @@
  *
  * 													Dane sterujace:
  * xyzab~
- * x - skret serwa w wartosciach miedzy 45, a 95
+ * x - skret serwa w wartosciach miedzy 40, a 80
  * y - obroty silnika 1 w wartosciach miedzy 0, a 120
  * z - obroty silnika 2 w wartosciach miedzy 0, a 120
  * a - kierunek obrotow silnika 1 w wartosciach 0 lub 1
@@ -47,7 +47,8 @@ volatile uint16_t dane_silnik1 = 0; // silnik napedzajacy, wylaczony, maks 60000
 volatile uint16_t dane_silnik2 = 0; // silnik unoszacy, wylaczony, wlaczony 60000
 volatile uint8_t kierunek_silnik1 = 1; // silnik napedzajacy, kierunek w przod
 volatile uint8_t kierunek_silnik2 = 1; // silnik unoszacy, kierunek unoszacy
-volatile uint8_t odl = 0; // zmienna przechowujaca odleglosc w cm, od przeszkody z czujnika HC-Sr04
+volatile uint8_t odl = 10; // zmienna przechowujaca odleglosc w cm, od przeszkody z czujnika HC-Sr04
+volatile uint8_t odl1 = 10;
 volatile uint16_t licznik_danych = 0; // licznik odebranych wlasciwie danych
 volatile const int16_t dlugosc = 6; // dlugosc odbieranych danych
 volatile uint16_t wartosc_ADC = 0; // wartosc z przetwornika ADC zapisana przez DMA
@@ -179,7 +180,7 @@ int main(void) {
 		 * i czy napiecie zasilania nie spadlo ponizej 9V*/
 
 		if (TIM_GetFlagStatus(TIM3, TIM_FLAG_Update) == RESET
-				&& (odl > 20 || odl <= 2) && wartosc_ADC > 3000) { // jesli spelnione to praca normalna
+				&& odl > 20 && wartosc_ADC > 3000) { // jesli spelnione to praca normalna
 			TIM4->CCR1 = dane_silnik1; // przypisanie wartosci PWM do silnika napedzajacego
 			TIM4->CCR2 = dane_silnik2; // przypisanie wartosci PWM do silnika unoszacego
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14); // reset diod sygnalizujacych bledy
@@ -201,7 +202,9 @@ int main(void) {
 				GPIO_SetBits(GPIOD, GPIO_Pin_12);
 		}
 		TIM4->CCR3 = dane_serwo; // przypisanie wartosci PWM do serwa
-		odl = (uint8_t)(
-				(UB_HCSR04_Distance_cm() + UB_HCSR04_Distance_cm()) / 2); //odczytywanie odleglosci z czujnika odleglosci HC-Sr04
+		odl1 = UB_HCSR04_Distance_cm(); //odczytywanie odleglosci z czujnika odleglosci HC-Sr04
+		Delay(10);
+		if (odl1 > 0) // eliminacja zaklucen powodowanych spadkami napiec
+			odl = (uint8_t) odl1;
 	}
 }
