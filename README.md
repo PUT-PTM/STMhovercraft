@@ -10,7 +10,11 @@ Remote-controlled hovercraft with two engines. Powered by a large battery.
 - servomechanism TowerPro MG-91
 - two engines with propellers
 - battery 9.6V
+<<<<<<< HEAD
 - controller L298N with radiator
+=======
+- controller L298 with radiator
+>>>>>>> origin/master
 
 Additionally: PC application written in Python 2.7.
 
@@ -35,9 +39,13 @@ For the safety of the battery, the voltage is measured and power is cut off when
 
 #### Control data:
 - xyzab~
+<<<<<<< HEAD
 - x - servos turn in the values between 40 and 80
+=======
+- x - servo turn in the values between 0 and 85
+>>>>>>> origin/master
 - y - engine 1 speed in the values between 0 and 120
-- z - engine 1 speed in the values between 0 and 120
+- z - engine 2 speed in the values between 0 and 120
 - a - rotate direction of engine 1 in the values of 0 or 1
 - b - rotate direction of engine 2 in the values of 0 or 1
 - sign "~" means that this is the end of data
