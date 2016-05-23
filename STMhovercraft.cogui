@@ -4,8 +4,8 @@
 <window>
 <fastViewData fastViewLocation="1024">
 <orientation position="512" view="org.eclipse.debug.ui.ExpressionView"/>
-<orientation position="512" view="org.coocox.builder.ui.views.ProjectView"/>
 <orientation position="512" view="org.coocox.component.ui.ComponentView"/>
+<orientation position="512" view="org.coocox.builder.ui.views.ProjectView"/>
 <orientation position="512" view="org.coocox.codebugger.trace.ui.traceview"/>
 <orientation position="512" view="org.eclipse.debug.ui.DebugView"/>
 <orientation position="512" view="org.eclipse.ui.console.ConsoleView"/>
@@ -28,7 +28,7 @@
 </editorArea>
 <editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" partName="main.c" path="E:/Maciej/Maciej/studia/STM32/Projekt_poduszkowiec/GIT/STMhovercraft/main.c" title="main.c" tooltip="E:/Maciej/Maciej/studia/STM32/Projekt_poduszkowiec/GIT/STMhovercraft/main.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/STMhovercraft/main.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="8302" selectionTopPixel="3139"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="8300" selectionTopPixel="3139"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="konfiguracje.c" partName="konfiguracje.c" path="E:/Maciej/Maciej/studia/STM32/Projekt_poduszkowiec/GIT/STMhovercraft/cmsis_lib/source/konfiguracje.c" title="konfiguracje.c" tooltip="E:/Maciej/Maciej/studia/STM32/Projekt_poduszkowiec/GIT/STMhovercraft/cmsis_lib/source/konfiguracje.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/STMhovercraft/cmsis_lib/source/konfiguracje.c"/>
@@ -36,10 +36,13 @@
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="stm32_ub_hcsr04.c" partName="stm32_ub_hcsr04.c" path="E:/Maciej/Maciej/studia/STM32/Projekt_poduszkowiec/GIT/STMhovercraft/Biblioteka HC-Sr04/stm32_ub_hcsr04.c" title="stm32_ub_hcsr04.c" tooltip="E:/Maciej/Maciej/studia/STM32/Projekt_poduszkowiec/GIT/STMhovercraft/Biblioteka HC-Sr04/stm32_ub_hcsr04.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/STMhovercraft/cmsis_lib/source/stm32_ub_hcsr04.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="8276" selectionTopPixel="4500"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="8739" selectionTopPixel="4500"/>
 </editor>
 </editors>
 <views>
+<view id="org.coocox.component.ui.ComponentView" partName="Components">
+<viewState/>
+</view>
 <view id="org.coocox.builder.ui.views.ProjectView" partName="Project">
 <viewState CommonNavigator.LINKING_ENABLED="0" horizontalPosition="0" org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets="0" verticalPosition="0">
 <expanded>
@@ -47,9 +50,6 @@
 <element path="/STMhovercraft/cmsis_lib"/>
 </expanded>
 </viewState>
-</view>
-<view id="org.coocox.component.ui.ComponentView" partName="Components">
-<viewState/>
 </view>
 <view id="org.coocox.codebugger.trace.ui.traceview" partName="Semihosting">
 <viewState/>
@@ -110,7 +110,7 @@
 <layout>
 <mainWindow>
 <info folder="true" part="org.eclipse.ui.internal.ViewStack@1fa7cda">
-<folder appearance="2" expanded="0">
+<folder appearance="2" expanded="2">
 <page content="org.coocox.component.ui.ComponentView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
@@ -142,7 +142,7 @@
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.44861338" ratioLeft="275" ratioRight="338" relationship="4" relative="org.coocox.builder.ui.exampleView"/>
 <info folder="true" part="org.eclipse.ui.internal.ViewStack@1ad04d" ratio="0.36867863" ratioLeft="226" ratioRight="387" relationship="4" relative="org.eclipse.ui.internal.ViewStack@1fa7cda">
-<folder appearance="2" expanded="0">
+<folder appearance="2" expanded="2">
 <page content="org.coocox.builder.ui.views.ProjectView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
@@ -245,45 +245,13 @@
 <editors>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/STMhovercraft/main.c"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/STMhovercraft/cmsis_lib/source/konfiguracje.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/STMhovercraft/cmsis_lib/include/konfiguracje.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/STMhovercraft/cmsis_lib/source/stm32_ub_hcsr04.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/STMhovercraft/cmsis_lib/source/konfiguracje.c"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/STMhovercraft/cmsis_lib/source/stm32_ub_hcsr04.c"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/STMhovercraft/cmsis_lib/source/konfiguracje.c"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/STMhovercraft/cmsis_lib/source/stm32_ub_hcsr04.c"/>
 </editors>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="konfiguracje.c" index="1">
-<position info="not_deleted" x="4713" y="0"/>
-</item>
-<item historyLabel="konfiguracje.h" index="2">
-<position info="not_deleted" x="197" y="0"/>
-</item>
-<item historyLabel="stm32_ub_hcsr04.c" index="3">
-<position info="not_deleted" x="8739" y="0"/>
-</item>
-<item historyLabel="konfiguracje.c" index="1">
-<position info="not_deleted" x="4713" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="1873" y="0"/>
-</item>
-<item historyLabel="konfiguracje.c" index="1">
-<position info="not_deleted" x="4713" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="1873" y="0"/>
-</item>
-<item historyLabel="konfiguracje.c" index="1">
-<position info="not_deleted" x="4660" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="konfiguracje.c" index="1">
-<position info="not_deleted" x="4660" y="0"/>
-</item>
-<item historyLabel="stm32_ub_hcsr04.c" index="3">
+<item historyLabel="stm32_ub_hcsr04.c" index="2">
 <position info="not_deleted" x="8739" y="0"/>
 </item>
 <item historyLabel="konfiguracje.c" index="1">
@@ -298,7 +266,7 @@
 <item historyLabel="konfiguracje.c" index="1">
 <position info="not_deleted" x="4660" y="0"/>
 </item>
-<item historyLabel="stm32_ub_hcsr04.c" index="3">
+<item historyLabel="stm32_ub_hcsr04.c" index="2">
 <position info="not_deleted" x="8684" y="1"/>
 </item>
 <item historyLabel="main.c" index="0">
@@ -307,37 +275,37 @@
 <item historyLabel="main.c" index="0">
 <position info="not_deleted" x="8230" y="26"/>
 </item>
-<item historyLabel="konfiguracje.c" index="4">
+<item historyLabel="konfiguracje.c" index="3">
 <position info="not_deleted" x="4710" y="0"/>
 </item>
 <item historyLabel="main.c" index="0">
 <position info="not_deleted" x="1191" y="0"/>
 </item>
-<item historyLabel="konfiguracje.c" index="4">
+<item historyLabel="konfiguracje.c" index="3">
 <position info="not_deleted" x="7872" y="0"/>
 </item>
 <item historyLabel="main.c" index="0">
 <position info="not_deleted" x="1191" y="0"/>
 </item>
-<item historyLabel="konfiguracje.c" index="4">
+<item historyLabel="konfiguracje.c" index="3">
 <position/>
 </item>
 <item historyLabel="main.c" index="0">
 <position info="not_deleted" x="8308" y="0"/>
 </item>
-<item historyLabel="konfiguracje.c" index="4">
+<item historyLabel="konfiguracje.c" index="3">
 <position/>
 </item>
 <item historyLabel="main.c" index="0">
 <position info="not_deleted" x="5507" y="0"/>
 </item>
-<item historyLabel="konfiguracje.c" index="4">
+<item historyLabel="konfiguracje.c" index="3">
 <position/>
 </item>
 <item historyLabel="main.c" index="0">
 <position/>
 </item>
-<item historyLabel="konfiguracje.c" index="4">
+<item historyLabel="konfiguracje.c" index="3">
 <position info="not_deleted" x="7825" y="0"/>
 </item>
 <item historyLabel="main.c" index="0">
@@ -346,59 +314,92 @@
 <item historyLabel="main.c" index="0">
 <position info="not_deleted" x="6257" y="0"/>
 </item>
-<item historyLabel="konfiguracje.c" index="4">
+<item historyLabel="konfiguracje.c" index="3">
 <position info="not_deleted" x="7875" y="0"/>
 </item>
-<item historyLabel="stm32_ub_hcsr04.c" index="5">
+<item historyLabel="stm32_ub_hcsr04.c" index="4">
 <position info="not_deleted" x="8169" y="659"/>
 </item>
-<item historyLabel="konfiguracje.c" index="4">
+<item historyLabel="konfiguracje.c" index="3">
 <position info="not_deleted" x="4445" y="403"/>
 </item>
-<item historyLabel="stm32_ub_hcsr04.c" index="5">
+<item historyLabel="stm32_ub_hcsr04.c" index="4">
 <position info="not_deleted" x="8330" y="0"/>
 </item>
-<item historyLabel="konfiguracje.c" index="4">
+<item historyLabel="konfiguracje.c" index="3">
 <position info="not_deleted" x="4710" y="0"/>
 </item>
-<item historyLabel="stm32_ub_hcsr04.c" index="5">
+<item historyLabel="stm32_ub_hcsr04.c" index="4">
 <position info="not_deleted" x="8276" y="0"/>
 </item>
-<item historyLabel="konfiguracje.c" index="4">
+<item historyLabel="konfiguracje.c" index="3">
 <position info="not_deleted" x="4763" y="0"/>
 </item>
-<item historyLabel="stm32_ub_hcsr04.c" index="5">
+<item historyLabel="stm32_ub_hcsr04.c" index="4">
 <position info="not_deleted" x="8277" y="0"/>
 </item>
-<item historyLabel="konfiguracje.c" index="4">
+<item historyLabel="konfiguracje.c" index="3">
 <position info="not_deleted" x="4511" y="0"/>
 </item>
-<item historyLabel="stm32_ub_hcsr04.c" index="5">
+<item historyLabel="stm32_ub_hcsr04.c" index="4">
 <position info="not_deleted" x="8277" y="0"/>
 </item>
-<item historyLabel="konfiguracje.c" index="4">
+<item historyLabel="konfiguracje.c" index="3">
 <position info="not_deleted" x="4511" y="0"/>
 </item>
-<item historyLabel="stm32_ub_hcsr04.c" index="5">
+<item historyLabel="stm32_ub_hcsr04.c" index="4">
 <position info="not_deleted" x="8277" y="0"/>
 </item>
 <item historyLabel="main.c" index="0">
 <position info="not_deleted" x="5625" y="0"/>
 </item>
-<item historyLabel="konfiguracje.c" index="4">
+<item historyLabel="konfiguracje.c" index="3">
 <position info="not_deleted" x="4763" y="0"/>
 </item>
-<item historyLabel="stm32_ub_hcsr04.c" index="5">
+<item historyLabel="stm32_ub_hcsr04.c" index="4">
 <position info="not_deleted" x="8276" y="0"/>
 </item>
-<item historyLabel="konfiguracje.c" index="4">
+<item historyLabel="konfiguracje.c" index="3">
 <position info="not_deleted" x="4763" y="0"/>
 </item>
 <item historyLabel="main.c" index="0">
 <position info="not_deleted" x="5625" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="8304" y="0"/>
+</item>
+<item historyLabel="konfiguracje.c" index="5">
+<position info="not_deleted" x="4763" y="0"/>
+</item>
+<item historyLabel="stm32_ub_hcsr04.c" index="6">
+<position info="not_deleted" x="2373" y="18"/>
+</item>
+<item historyLabel="konfiguracje.c" index="5">
+<position info="not_deleted" x="4763" y="0"/>
+</item>
+<item historyLabel="stm32_ub_hcsr04.c" index="6">
+<position info="not_deleted" x="8739" y="0"/>
+</item>
+<item historyLabel="konfiguracje.c" index="5">
+<position info="not_deleted" x="4763" y="0"/>
+</item>
+<item historyLabel="stm32_ub_hcsr04.c" index="6">
+<position info="not_deleted" x="8739" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="8300" y="0"/>
+</item>
+<item historyLabel="stm32_ub_hcsr04.c" index="6">
+<position info="not_deleted" x="8739" y="0"/>
+</item>
+<item historyLabel="konfiguracje.c" index="5">
+<position info="not_deleted" x="4763" y="0"/>
+</item>
+<item historyLabel="stm32_ub_hcsr04.c" index="6">
+<position info="not_deleted" x="8739" y="0"/>
 </item>
 <item active="true" historyLabel="main.c" index="0">
-<position info="not_deleted" x="8304" y="0"/>
+<position info="not_deleted" x="8300" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
