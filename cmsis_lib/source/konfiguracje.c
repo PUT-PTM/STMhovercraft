@@ -100,12 +100,12 @@ void Config_Rx() {
  Funkcja konfigurujaca przerwania dla USART
  **********************************************************************************************************/
 void Config_NVIC() {
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_3);
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 	NVIC_InitTypeDef NVIC_InitStructure;
 	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
 	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }
@@ -157,7 +157,7 @@ void PWM() {
 void Timer5() {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE);
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	TIM_TimeBaseStructure.TIM_Period = 200;
+	TIM_TimeBaseStructure.TIM_Period = 100;
 	TIM_TimeBaseStructure.TIM_Prescaler = 41999;
 	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
@@ -178,7 +178,7 @@ void Timer4() {
 void Timer3() {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	TIM_TimeBaseStructure.TIM_Period = 10000;
+	TIM_TimeBaseStructure.TIM_Period = 5000;
 	TIM_TimeBaseStructure.TIM_Prescaler = 41999;
 	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;

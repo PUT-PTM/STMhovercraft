@@ -81,10 +81,10 @@ void read_string() {
 		while (USART_GetFlagStatus(USART3, USART_FLAG_RXNE) == SET) {
 			d[licznik_danych] = USART_ReceiveData(USART3);
 			licznik_danych++;
-			TIM5->CNT = 0;
+			TIM_ClearFlag(TIM5, TIM_FLAG_Update);
 		}
 		// jesli przekroczono dopuszczalny prog bledu to wyjdz z petli i anuluj dane
-		if (TIM_GetFlagStatus(TIM5, TIM_FLAG_Update)) {
+		if (TIM_GetFlagStatus(TIM5, TIM_FLAG_Update) && d[5] != '~') {
 			licznik_danych = 0;
 			break;
 		}
@@ -205,6 +205,6 @@ int main(void) {
 		odl1 = UB_HCSR04_Distance_cm(); //odczytywanie odleglosci z czujnika odleglosci HC-Sr04
 		if (odl1 > 0) // eliminacja zaklucen powodowanych spadkami napiec
 			odl = (uint8_t) odl1;
-		Delay(50);
+		Delay(100);
 	}
 }
