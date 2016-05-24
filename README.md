@@ -1,5 +1,5 @@
 # Hovercraft
-Remote-controlled hovercraft with two engines. Powered by battery.
+Remote-controlled hovercraft with two engines. Powered by battery.<br />
 [Hovercaft remote control project] (https://github.com/PUT-PTM/STMhovercraftRemote)
 
 ## Demo
